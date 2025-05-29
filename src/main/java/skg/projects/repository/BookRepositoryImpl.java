@@ -1,13 +1,13 @@
-package mate.academy.repository;
+package skg.projects.repository;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import mate.academy.exception.DataProcessingException;
-import mate.academy.model.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
+import skg.projects.exception.DataProcessingException;
+import skg.projects.model.Book;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can not insert product to DB", e);
+            throw new DataProcessingException("Can not insert book to DB", e);
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

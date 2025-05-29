@@ -1,12 +1,12 @@
-package mate.academy;
+package skg.projects;
 
 import java.math.BigDecimal;
-import mate.academy.model.Book;
-import mate.academy.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import skg.projects.model.Book;
+import skg.projects.service.BookService;
 
 @SpringBootApplication
 public class OnlineBookStoreApplication {

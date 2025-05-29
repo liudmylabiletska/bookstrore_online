@@ -1,7 +1,7 @@
-package mate.academy.repository;
+package skg.projects.repository;
 
 import java.util.List;
-import mate.academy.model.Book;
+import skg.projects.model.Book;
 
 public interface BookRepository {
     Book save(Book book);

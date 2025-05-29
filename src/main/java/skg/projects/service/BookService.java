@@ -1,7 +1,7 @@
-package mate.academy.service;
+package skg.projects.service;
 
 import java.util.List;
-import mate.academy.model.Book;
+import skg.projects.model.Book;
 
 public interface BookService {
     Book save(Book book);

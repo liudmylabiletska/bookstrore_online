@@ -1,10 +1,10 @@
-package mate.academy.service;
+package skg.projects.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import mate.academy.model.Book;
-import mate.academy.repository.BookRepository;
 import org.springframework.stereotype.Service;
+import skg.projects.model.Book;
+import skg.projects.repository.BookRepository;
 
 @Service
 @RequiredArgsConstructor
