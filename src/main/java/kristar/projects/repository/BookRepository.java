@@ -2,7 +2,6 @@ package kristar.projects.repository;
 
 import java.util.List;
 import java.util.Optional;
-
 import kristar.projects.model.Book;
 
 public interface BookRepository {

@@ -1,15 +1,15 @@
 package kristar.projects.repository;
 
-import java.util.List;
-import java.util.Optional;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import java.util.List;
+import java.util.Optional;
+import kristar.projects.exception.DataProcessingException;
+import kristar.projects.exception.EntityNotFoundException;
+import kristar.projects.model.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import kristar.projects.exception.DataProcessingException;
-import kristar.projects.model.Book;
 
 @Repository
 @RequiredArgsConstructor
@@ -53,6 +53,8 @@ public class BookRepositoryImpl implements BookRepository {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             Book book = entityManager.find(Book.class, id);
             return Optional.ofNullable(book);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Can not get book by id: " + id, e);
         }
     }
 }

@@ -1,17 +1,14 @@
 package kristar.projects.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import kristar.projects.dto.BookDto;
 import kristar.projects.dto.CreateBookRequestDto;
 import kristar.projects.mapper.BookMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import kristar.projects.model.Book;
 import kristar.projects.repository.BookRepository;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +31,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto finById(Long id) {
+    public BookDto findById(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can not find book with id" + id));
         return bookMapper.toDto(book);
-    };
-
+    }
 }

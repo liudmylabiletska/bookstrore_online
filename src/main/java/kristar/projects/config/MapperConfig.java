@@ -2,7 +2,6 @@ package kristar.projects.config;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.NullValueCheckStrategy;
-import org.springframework.data.repository.config.ImplementationDetectionConfiguration;
 
 @org.mapstruct.MapperConfig(
         componentModel = "spring",
