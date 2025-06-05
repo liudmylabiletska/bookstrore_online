@@ -1,4 +1,4 @@
-package skg.projects.model;
+package kristar.projects.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
