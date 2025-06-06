@@ -2,6 +2,7 @@ package kristar.projects.service;
 
 import java.util.List;
 import kristar.projects.dto.BookDto;
+import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
 
 public interface BookService {
@@ -12,4 +13,6 @@ public interface BookService {
     BookDto findById(Long id);
 
     void deleteById(Long id);
+
+    List<BookDto> search(BookSearchParametersDto searchParameters);
 }
