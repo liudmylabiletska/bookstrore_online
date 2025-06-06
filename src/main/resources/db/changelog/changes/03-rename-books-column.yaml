@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename-books-column
+      author: ksavchenko
+      changes:
+        - renameColumn:
+            tableName: books
+            oldColumnName: coverImage
+            newColumnName: cover_image
+            columnDataType: VARCHAR(255)
