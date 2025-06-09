@@ -6,11 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 public interface SpecificationProvider<T> {
     String getKey();
 
-    default Specification<T> getSpecificationString(String[] params) {
-        return null;
-    }
+    Specification<T> getSpecificationString(String[] params);
 
-    default Specification<T> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        return null;
-    }
+    Specification<T> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice);
 }

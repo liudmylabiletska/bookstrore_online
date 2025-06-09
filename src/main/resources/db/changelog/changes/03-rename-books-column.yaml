@@ -8,3 +8,9 @@ databaseChangeLog:
             oldColumnName: coverImage
             newColumnName: cover_image
             columnDataType: VARCHAR(255)
+      rollback:
+        - renameColumn:
+            tableName: books
+            oldColumnName: cover_image
+            newColumnName: coverImage
+            columnDataType: VARCHAR(255)

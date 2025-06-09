@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PriceSpecificationProvider implements SpecificationProvider<Book> {
+public abstract class PriceSpecificationProvider implements SpecificationProvider<Book> {
     private static final String PRICE = "price";
 
     @Override

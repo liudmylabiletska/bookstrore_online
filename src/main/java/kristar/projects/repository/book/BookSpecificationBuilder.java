@@ -6,14 +6,16 @@ import kristar.projects.model.Book;
 import kristar.projects.repository.SpecificationBuilder;
 import kristar.projects.repository.SpecificationProviderManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
-    @Autowired
+    private static final String TITLE = "title";
+    private static final String AUTHOR = "author";
+    private static final String PRICE = "price";
+
     private SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override
@@ -21,19 +23,19 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
         Specification<Book> spec = Specification.anyOf();
         if (searchParametersDto.title() != null
                 && searchParametersDto.title().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("title")
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(TITLE)
                     .getSpecificationString(searchParametersDto.title()));
         }
         if (searchParametersDto.author() != null
                 && searchParametersDto.author().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("author")
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(AUTHOR)
                     .getSpecificationString(searchParametersDto.author()));
         }
         if (searchParametersDto.minPrice() != null
                 && searchParametersDto.minPrice().compareTo(BigDecimal.ZERO) > 0
                 && searchParametersDto.maxPrice() != null
                 && searchParametersDto.maxPrice().compareTo(BigDecimal.ZERO) > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider("price")
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(PRICE)
                     .getSpecificationPrice(searchParametersDto.minPrice(),
                             searchParametersDto.maxPrice()));
         }

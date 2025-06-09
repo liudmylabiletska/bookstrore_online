@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TitleSpecificationProvider implements SpecificationProvider<Book> {
+public abstract class TitleSpecificationProvider implements SpecificationProvider<Book> {
     private static final String TITLE = "title";
 
     @Override
