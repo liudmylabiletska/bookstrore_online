@@ -7,12 +7,12 @@ import jakarta.persistence.criteria.Root;
 import java.util.Arrays;
 import kristar.projects.model.Book;
 import kristar.projects.repository.SpecificationProvider;
+import kristar.projects.repository.book.BookSpecificationBuilder;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
 public abstract class TitleSpecificationProvider implements SpecificationProvider<Book> {
-    private static final String TITLE = "title";
 
     @Override
     public Specification<Book> getSpecificationString(String[] params) {
@@ -21,13 +21,13 @@ public abstract class TitleSpecificationProvider implements SpecificationProvide
             @Override
             public Predicate toPredicate(Root<Book> root, CriteriaQuery<?> query,
                                          CriteriaBuilder criteriaBuilder) {
-                return root.get(TITLE).in(Arrays.stream(params).toArray());
+                return root.get(BookSpecificationBuilder.TITLE).in(Arrays.stream(params).toArray());
             }
         };
     }
 
     @Override
     public String getKey() {
-        return TITLE;
+        return BookSpecificationBuilder.TITLE;
     }
 }

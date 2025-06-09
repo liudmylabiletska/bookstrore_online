@@ -1,10 +1,10 @@
 package kristar.projects.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import kristar.projects.dto.BookDto;
 import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
+import kristar.projects.exception.EntityNotFoundException;
 import kristar.projects.mapper.BookMapper;
 import kristar.projects.model.Book;
 import kristar.projects.repository.book.BookRepository;
@@ -37,7 +37,8 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto findById(Long id) {
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can not find book with id" + id));
+                .orElseThrow(() -> new EntityNotFoundException("Book found fain with id " + id));
+
         return bookMapper.toDto(book);
     }
 
