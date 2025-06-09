@@ -2,6 +2,7 @@ package kristar.projects.controller;
 
 import java.util.List;
 import kristar.projects.dto.BookDto;
+import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
 import kristar.projects.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,10 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters);
     }
 }
