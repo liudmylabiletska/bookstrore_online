@@ -3,7 +3,6 @@ package kristar.projects.dto;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Data;
@@ -16,7 +15,7 @@ public class CreateBookRequestDto {
     @NotBlank(message = "Author can not be empty")
     @Size(min = 1, max = 100, message = "Author must be between 1 and 100 characters")
     private String author;
-    @NotNull(message = "ISBN cannot be empty")
+    @NotBlank(message = "ISBN cannot be empty")
     @Size(min = 5, max = 20, message = "ISBN must be between 5 and 20 characters")
     private String isbn;
     @NotBlank(message = "Price can not be null")
