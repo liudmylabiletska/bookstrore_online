@@ -9,17 +9,14 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class CreateBookRequestDto {
-    @NotBlank(message = "Title can not be empty")
-    @Size(min = 1, max = 300, message = "Title must be between 1 and 300 characters")
+public class UpdateBookRequestDto {
+    @NotBlank(message = "Title cannot be blank")
     private String title;
-    @NotBlank(message = "Author can not be empty")
-    @Size(min = 1, max = 100, message = "Author must be between 1 and 100 characters")
+    @NotBlank(message = "Author cannot be blank")
     private String author;
-    @NotNull(message = "ISBN cannot be empty")
-    @Size(min = 5, max = 20, message = "ISBN must be between 5 and 20 characters")
+    @NotBlank(message = "ISBN cannot be blank")
     private String isbn;
-    @NotBlank(message = "Price can not be null")
+    @NotNull(message = "Price can not be null")
     @Min(value = 0, message = "Price must be 0 or positive")
     @Digits(integer = 6, fraction = 2, message = "Price must have maximum "
             + "6 digits before decimal and 2 after")
