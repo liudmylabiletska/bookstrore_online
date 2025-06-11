@@ -1,14 +1,17 @@
 package kristar.projects.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import kristar.projects.dto.BookDto;
 import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
+import kristar.projects.dto.UpdateBookRequestDto;
 import kristar.projects.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +38,7 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDto createBook(@RequestBody CreateBookRequestDto requestDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
@@ -48,5 +51,12 @@ public class BookController {
     @GetMapping("/search")
     public List<BookDto> search(BookSearchParametersDto searchParameters) {
         return bookService.search(searchParameters);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}")
+    public BookDto updateById(@PathVariable Long id,
+                              @RequestBody @Valid UpdateBookRequestDto requestDto) {
+        return bookService.updateById(id, requestDto);
     }
 }

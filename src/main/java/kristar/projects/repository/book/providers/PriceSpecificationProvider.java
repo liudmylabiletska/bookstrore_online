@@ -1,5 +1,7 @@
 package kristar.projects.repository.book.providers;
 
+import static kristar.projects.repository.book.BookSpecificationBuilder.PRICE;
+
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -11,15 +13,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class PriceSpecificationProvider implements SpecificationProvider<Book> {
-    private static final String PRICE = "price";
-
     @Override
     public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
 
         return (Root<Book> root,
                 CriteriaQuery<?> query,
                 CriteriaBuilder criteriaBuilder)
-                -> criteriaBuilder.between(root.get(PRICE), minPrice, maxPrice);
+                -> criteriaBuilder.between(root.get(PRICE),
+                minPrice, maxPrice);
     }
 
     @Override

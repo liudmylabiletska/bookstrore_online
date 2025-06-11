@@ -1,5 +1,7 @@
 package kristar.projects.repository.book.providers;
 
+import static kristar.projects.repository.book.BookSpecificationBuilder.AUTHOR;
+
 import java.util.Arrays;
 import kristar.projects.model.Book;
 import kristar.projects.repository.SpecificationProvider;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AuthorSpecificationProvider implements SpecificationProvider<Book> {
-    private static final String AUTHOR = "author";
 
     @Override
     public Specification<Book> getSpecificationString(String[] params) {

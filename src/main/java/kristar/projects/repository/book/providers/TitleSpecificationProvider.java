@@ -1,5 +1,7 @@
 package kristar.projects.repository.book.providers;
 
+import static kristar.projects.repository.book.BookSpecificationBuilder.TITLE;
+
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class TitleSpecificationProvider implements SpecificationProvider<Book> {
-    private static final String TITLE = "title";
 
     @Override
     public Specification<Book> getSpecificationString(String[] params) {
