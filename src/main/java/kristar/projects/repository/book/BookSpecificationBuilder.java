@@ -16,7 +16,7 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     public static final String AUTHOR = "author";
     public static final String PRICE = "price";
 
-    private SpecificationProviderManager<Book> bookSpecificationProviderManager;
+    private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
     @Override
     public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
@@ -31,10 +31,14 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
             spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(AUTHOR)
                     .getSpecificationString(searchParametersDto.author()));
         }
-        if (searchParametersDto.minPrice() != null
-                && searchParametersDto.minPrice().compareTo(BigDecimal.ZERO) > 0
-                && searchParametersDto.maxPrice() != null
-                && searchParametersDto.maxPrice().compareTo(BigDecimal.ZERO) > 0) {
+        if (searchParametersDto.minPrice() != null && searchParametersDto.maxPrice() != null) {
+            if (searchParametersDto.minPrice().compareTo(BigDecimal.ZERO) < 0
+                    && searchParametersDto.maxPrice().compareTo(BigDecimal.ZERO) < 0
+                    && searchParametersDto.maxPrice().compareTo(searchParametersDto.minPrice()) < 0
+            ) {
+                throw new IllegalArgumentException("Check min and max prices, it must be positive."
+                        + " And Min price cannot be greater than max price");
+            }
             spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(PRICE)
                     .getSpecificationPrice(searchParametersDto.minPrice(),
                             searchParametersDto.maxPrice()));

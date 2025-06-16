@@ -3,7 +3,6 @@ package kristar.projects.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import kristar.projects.dto.BookDto;
 import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
@@ -59,10 +58,13 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "Search all books by parameters", description = "Searching booksDto/books "
-            + "by parameters as a list")
-    public List<BookDto> search(BookSearchParametersDto searchParameters) {
-        return bookService.search(searchParameters);
+    @Operation(summary = "Search all books by parameters", description = "Searching booksDto/books"
+            + " by parameters as a list")
+    public Page<BookDto> search(
+            @ParameterObject BookSearchParametersDto searchParameters,
+            @ParameterObject Pageable pageable
+    ) {
+        return bookService.search(searchParameters, pageable);
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -1,6 +1,5 @@
 package kristar.projects.service;
 
-import java.util.List;
 import kristar.projects.dto.BookDto;
 import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
@@ -53,12 +52,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+    public Page<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable) {
         Specification<Book> bookSpecification = bookSpecificationBuilder.build(searchParameters);
-        return bookRepository.findAll(bookSpecification)
-                .stream()
-                .map(bookMapper::toDto)
-                .toList();
+        return bookRepository.findAll(bookSpecification, pageable)
+                .map(bookMapper::toDto);
     }
 
     @Override

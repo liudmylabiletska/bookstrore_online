@@ -1,6 +1,5 @@
 package kristar.projects.service;
 
-import java.util.List;
 import kristar.projects.dto.BookDto;
 import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
@@ -17,7 +16,7 @@ public interface BookService {
 
     void deleteById(Long id);
 
-    List<BookDto> search(BookSearchParametersDto searchParameters);
+    Page<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable);
 
     BookDto updateById(Long id, UpdateBookRequestDto requestDto);
 }
