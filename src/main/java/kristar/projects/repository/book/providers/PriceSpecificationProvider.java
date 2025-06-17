@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public abstract class PriceSpecificationProvider implements SpecificationProvider<Book> {
+public class PriceSpecificationProvider implements SpecificationProvider<Book> {
     @Override
     public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
 
@@ -27,5 +27,9 @@ public abstract class PriceSpecificationProvider implements SpecificationProvide
     public String getKey() {
         return PRICE;
     }
-}
 
+    @Override
+    public Specification<Book> getSpecificationString(String[] params) {
+        throw new UnsupportedOperationException("Unsupported operation for prices' filter");
+    }
+}

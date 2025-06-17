@@ -1,21 +1,22 @@
 package kristar.projects.service;
 
-import java.util.List;
 import kristar.projects.dto.BookDto;
 import kristar.projects.dto.BookSearchParametersDto;
 import kristar.projects.dto.CreateBookRequestDto;
 import kristar.projects.dto.UpdateBookRequestDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface BookService {
     BookDto save(CreateBookRequestDto requestDto);
 
-    List<BookDto> getAll();
+    Page<BookDto> getAll(Pageable pageable);
 
     BookDto findById(Long id);
 
     void deleteById(Long id);
 
-    List<BookDto> search(BookSearchParametersDto searchParameters);
+    Page<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable);
 
     BookDto updateById(Long id, UpdateBookRequestDto requestDto);
 }
