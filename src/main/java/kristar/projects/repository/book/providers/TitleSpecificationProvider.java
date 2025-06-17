@@ -9,7 +9,7 @@ import jakarta.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import kristar.projects.model.Book;
-import kristar.projects.repository.SpecificationProvider;
+import kristar.projects.repository.book.SpecificationProvider;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 

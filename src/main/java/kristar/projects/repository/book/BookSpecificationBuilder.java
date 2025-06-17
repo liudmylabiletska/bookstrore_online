@@ -1,10 +1,8 @@
 package kristar.projects.repository.book;
 
 import java.math.BigDecimal;
-import kristar.projects.dto.BookSearchParametersDto;
+import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.model.Book;
-import kristar.projects.repository.SpecificationBuilder;
-import kristar.projects.repository.SpecificationProviderManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

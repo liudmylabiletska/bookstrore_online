@@ -1,9 +1,9 @@
 package kristar.projects.mapper;
 
 import kristar.projects.config.MapperConfig;
-import kristar.projects.dto.BookDto;
-import kristar.projects.dto.CreateBookRequestDto;
-import kristar.projects.dto.UpdateBookRequestDto;
+import kristar.projects.dto.bookdto.BookDto;
+import kristar.projects.dto.bookdto.CreateBookRequestDto;
+import kristar.projects.dto.bookdto.UpdateBookRequestDto;
 import kristar.projects.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

@@ -1,9 +1,9 @@
 package kristar.projects.service;
 
-import kristar.projects.dto.BookDto;
-import kristar.projects.dto.BookSearchParametersDto;
-import kristar.projects.dto.CreateBookRequestDto;
-import kristar.projects.dto.UpdateBookRequestDto;
+import kristar.projects.dto.bookdto.BookDto;
+import kristar.projects.dto.bookdto.BookSearchParametersDto;
+import kristar.projects.dto.bookdto.CreateBookRequestDto;
+import kristar.projects.dto.bookdto.UpdateBookRequestDto;
 import kristar.projects.exception.EntityNotFoundException;
 import kristar.projects.mapper.BookMapper;
 import kristar.projects.model.Book;
