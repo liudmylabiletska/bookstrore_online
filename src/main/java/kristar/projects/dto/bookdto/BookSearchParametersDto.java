@@ -1,4 +1,4 @@
-package kristar.projects.dto;
+package kristar.projects.dto.bookdto;
 
 import java.math.BigDecimal;
 

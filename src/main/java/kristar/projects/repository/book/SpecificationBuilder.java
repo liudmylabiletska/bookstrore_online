@@ -1,6 +1,6 @@
-package kristar.projects.repository;
+package kristar.projects.repository.book;
 
-import kristar.projects.dto.BookSearchParametersDto;
+import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface SpecificationBuilder<T> {
