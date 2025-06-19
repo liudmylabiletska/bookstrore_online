@@ -7,12 +7,15 @@ import kristar.projects.dto.bookdto.BookDto;
 import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.dto.bookdto.CreateBookRequestDto;
 import kristar.projects.dto.bookdto.UpdateBookRequestDto;
+import kristar.projects.model.User;
 import kristar.projects.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,8 +36,10 @@ public class BookController {
 
     @GetMapping
     @Operation(summary = "Get all books", description = "Get a list of all available books")
-    public Page<BookDto> findAll(@ParameterObject Pageable pageable) {
-        return bookService.getAll(pageable);
+    public Page<BookDto> findAll(@ParameterObject Authentication authentication,
+                                 @ParameterObject Pageable pageable) {
+        User user = (User) authentication.getPrincipal();
+        return bookService.getAll(user.getEmail(), pageable);
     }
 
     @GetMapping("/{id}")
@@ -43,6 +48,7 @@ public class BookController {
         return bookService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create  new book", description = "Creation a new book")
@@ -50,6 +56,7 @@ public class BookController {
         return bookService.save(requestDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete the book by id", description = "Deletion the book by id")
@@ -67,6 +74,7 @@ public class BookController {
         return bookService.search(searchParameters, pageable);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
     @Operation(summary = "Update book by id", description = "Updating book entity by id")
