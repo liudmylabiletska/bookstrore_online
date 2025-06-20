@@ -1,6 +1,5 @@
 package kristar.projects.service;
 
-import static kristar.projects.model.RoleName.ADMIN;
 import static kristar.projects.model.RoleName.USER;
 
 import java.util.HashSet;
@@ -37,11 +36,6 @@ public class UserServiceImpl implements UserService {
         userFromRequestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
 
         Set<Role> roles = new HashSet<>();
-        if (requestDto.isAdmin()) {
-            Role adminRole = roleRepository.findByName(ADMIN)
-                    .orElseThrow(() -> new RuntimeException("ADMIN role: " + ADMIN + " not found"));
-            roles.add(adminRole);
-        }
 
         Role userRole = roleRepository.findByName(USER)
                 .orElseThrow(() -> new RegistrationException("User role: " + USER + " not found"));

@@ -27,8 +27,4 @@ public class UserRegistrationRequestDto {
     private String lastName;
 
     private String shippingAddress;
-
-    public boolean isAdmin() {
-        return false;
-    }
 }
