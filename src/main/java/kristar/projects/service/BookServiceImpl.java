@@ -38,6 +38,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Page<BookDto> getAll(String email, Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(bookMapper::toDto);
+    }
+
+    @Override
     public BookDto findById(Long id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can not find book with id " + id));
