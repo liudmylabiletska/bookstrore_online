@@ -1,6 +1,7 @@
-package kristar.projects.service;
+package kristar.projects.services.impl;
 
 import kristar.projects.dto.bookdto.BookDto;
+import kristar.projects.dto.bookdto.BookDtoWithoutCategoryIds;
 import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.dto.bookdto.CreateBookRequestDto;
 import kristar.projects.dto.bookdto.UpdateBookRequestDto;
@@ -9,6 +10,7 @@ import kristar.projects.mapper.BookMapper;
 import kristar.projects.model.Book;
 import kristar.projects.repository.book.BookRepository;
 import kristar.projects.repository.book.BookSpecificationBuilder;
+import kristar.projects.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -70,7 +72,13 @@ public class BookServiceImpl implements BookService {
         Book existingBook = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can not find book with id "
                         + id + " to update"));
-        bookMapper.updateBookFromDto(requestDto, existingBook);
+        bookMapper.updateBookFromDto(existingBook, requestDto);
         return bookMapper.toDto(bookRepository.save(existingBook));
+    }
+
+    @Override
+    public Page<BookDtoWithoutCategoryIds> findBooksByCategoryId(Long id, Pageable pageable) {
+        Page<Book> allBooksByCategoryId = bookRepository.findAllByCategoryId(id, pageable);
+        return allBooksByCategoryId.map((book -> bookMapper.toDtoWithoutCategories(book)));
     }
 }

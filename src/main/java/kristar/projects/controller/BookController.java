@@ -8,7 +8,7 @@ import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.dto.bookdto.CreateBookRequestDto;
 import kristar.projects.dto.bookdto.UpdateBookRequestDto;
 import kristar.projects.model.User;
-import kristar.projects.service.BookService;
+import kristar.projects.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -51,7 +51,7 @@ public class BookController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create  new book", description = "Creation a new book")
+    @Operation(summary = "Create new book", description = "Creation a new book")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }

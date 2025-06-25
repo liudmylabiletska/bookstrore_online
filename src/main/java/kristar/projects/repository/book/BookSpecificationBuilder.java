@@ -13,6 +13,7 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     public static final String TITLE = "title";
     public static final String AUTHOR = "author";
     public static final String PRICE = "price";
+    public static final String CATEGORY = "category";
 
     private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
 
@@ -40,6 +41,11 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
             spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(PRICE)
                     .getSpecificationPrice(searchParametersDto.minPrice(),
                             searchParametersDto.maxPrice()));
+        }
+        if (searchParametersDto.categoryIds() != null
+                && searchParametersDto.categoryIds().length > 0) {
+            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(CATEGORY)
+                    .getSpecificationLong(searchParametersDto.categoryIds()));
         }
         return spec;
     }

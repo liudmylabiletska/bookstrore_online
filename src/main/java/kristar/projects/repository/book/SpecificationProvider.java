@@ -9,4 +9,6 @@ public interface SpecificationProvider<T> {
     Specification<T> getSpecificationString(String[] params);
 
     Specification<T> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice);
+
+    Specification<T> getSpecificationLong(Long[] ids);
 }

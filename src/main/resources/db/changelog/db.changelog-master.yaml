@@ -17,3 +17,11 @@ databaseChangeLog:
       file: db/changelog/changes/08-insert-roles.yaml
   - include:
       file: db/changelog/changes/09-create-users-roles-table.yaml
+  - include:
+      file: db/changelog/changes/10-create-categories-table.yaml
+  - include:
+      file: db/changelog/changes/11-insert-base-categories.yaml
+  - include:
+      file: db/changelog/changes/12-create-books-categories-join-table.yaml
+  - include:
+      file: db/changelog/changes/13-assign-drama-to-all-books.yaml

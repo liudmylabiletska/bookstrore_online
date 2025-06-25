@@ -25,6 +25,11 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
     }
 
     @Override
+    public Specification<Book> getSpecificationLong(Long[] ids) {
+        throw new UnsupportedOperationException("Unsupported operation for titles' filter");
+    }
+
+    @Override
     public String getKey() {
         return AUTHOR;
     }

@@ -1,6 +1,7 @@
-package kristar.projects.service;
+package kristar.projects.services;
 
 import kristar.projects.dto.bookdto.BookDto;
+import kristar.projects.dto.bookdto.BookDtoWithoutCategoryIds;
 import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.dto.bookdto.CreateBookRequestDto;
 import kristar.projects.dto.bookdto.UpdateBookRequestDto;
@@ -21,4 +22,6 @@ public interface BookService {
     Page<BookDto> search(BookSearchParametersDto searchParameters, Pageable pageable);
 
     BookDto updateById(Long id, UpdateBookRequestDto requestDto);
+
+    Page<BookDtoWithoutCategoryIds> findBooksByCategoryId(Long id, Pageable pageable);
 }

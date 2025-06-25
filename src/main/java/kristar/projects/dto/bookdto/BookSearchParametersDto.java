@@ -6,5 +6,7 @@ public record BookSearchParametersDto(
         String[] title,
         String[] author,
         BigDecimal minPrice,
-        BigDecimal maxPrice) {
+        BigDecimal maxPrice,
+        Long[] categoryIds
+) {
 }
