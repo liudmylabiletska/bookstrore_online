@@ -1,6 +1,7 @@
 package kristar.projects.services.impl;
 
-import kristar.projects.dto.categorydto.CategoryDto;
+import kristar.projects.dto.categorydto.CategoryRequestDto;
+import kristar.projects.dto.categorydto.CategoryResponseDto;
 import kristar.projects.exception.EntityNotFoundException;
 import kristar.projects.mapper.CategoryMapper;
 import kristar.projects.model.Category;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements kristar.projects.services.CategoryService {
@@ -18,13 +20,13 @@ public class CategoryServiceImpl implements kristar.projects.services.CategorySe
     private final CategoryMapper categoryMapper;
 
     @Override
-    public Page<CategoryDto> findAll(Pageable pageable) {
+    public Page<CategoryResponseDto> findAll(Pageable pageable) {
         return categoryRepository.findAll(pageable)
                 .map(category -> (categoryMapper.toDto(category)));
     }
 
     @Override
-    public CategoryDto getById(Long id) {
+    public CategoryResponseDto getById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can not"
                         + " find category with id " + id));
@@ -32,21 +34,18 @@ public class CategoryServiceImpl implements kristar.projects.services.CategorySe
     }
 
     @Override
-    @Transactional
-    public CategoryDto save(CategoryDto categoryDto) {
-        Category category = categoryMapper.toEntity(categoryDto);
+    public CategoryResponseDto save(CategoryRequestDto categoryRequestDto) {
+        Category category = categoryMapper.toEntity(categoryRequestDto);
         Category savedCategory = categoryRepository.save(category);
         return categoryMapper.toDto(savedCategory);
     }
 
     @Override
-    @Transactional
-    public CategoryDto update(Long id, CategoryDto categoryDto) {
+    public CategoryResponseDto update(Long id, CategoryRequestDto categoryRequestDto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category "
                         + "not found with id: " + id));
-        category.setName(categoryDto.getName());
-        category.setDescription(categoryDto.getDescription());
+        categoryMapper.updateCategoryFromDto(category, categoryRequestDto);
 
         Category savedCategory = categoryRepository.save(category);
 
@@ -54,7 +53,6 @@ public class CategoryServiceImpl implements kristar.projects.services.CategorySe
     }
 
     @Override
-    @Transactional
     public void deleteById(Long id) {
         categoryRepository.deleteById(id);
     }

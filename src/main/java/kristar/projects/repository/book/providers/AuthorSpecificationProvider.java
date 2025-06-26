@@ -20,17 +20,17 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
     }
 
     @Override
+    public String getKey() {
+        return AUTHOR;
+    }
+
+    @Override
     public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        throw new UnsupportedOperationException("Unsupported operation for authors' filter");
+        throw new UnsupportedOperationException("Unsupported operation for filter by author");
     }
 
     @Override
     public Specification<Book> getSpecificationLong(Long[] ids) {
-        throw new UnsupportedOperationException("Unsupported operation for titles' filter");
-    }
-
-    @Override
-    public String getKey() {
-        return AUTHOR;
+        throw new UnsupportedOperationException("Unsupported operation for filter by author");
     }
 }

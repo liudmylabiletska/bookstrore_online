@@ -3,6 +3,7 @@ package kristar.projects.dto.bookdto;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -26,6 +27,6 @@ public class UpdateBookRequestDto {
     private String description;
     @Size(max = 500, message = "URL of cover image must be not longer more than 500 characters")
     private String coverImage;
-    @NotNull(message = "Category IDs cannot be null")
+    @NotEmpty(message = "Category IDs cannot be null")
     private Set<Long> categoryIds;
 }

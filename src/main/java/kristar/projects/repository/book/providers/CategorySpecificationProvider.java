@@ -1,6 +1,5 @@
 package kristar.projects.repository.book.providers;
 
-import static kristar.projects.repository.book.BookSpecificationBuilder.AUTHOR;
 import static kristar.projects.repository.book.BookSpecificationBuilder.CATEGORY;
 
 import java.math.BigDecimal;
@@ -12,6 +11,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CategorySpecificationProvider implements SpecificationProvider<Book> {
+
+    @Override
+    public Specification<Book> getSpecificationLong(Long[] categoryIds) {
+        return (root, query, criteriaBuilder)
+                -> root.get(CATEGORY).in(Arrays.stream(categoryIds).toArray());
+    }
+
     @Override
     public String getKey() {
         return CATEGORY;
@@ -19,17 +25,11 @@ public class CategorySpecificationProvider implements SpecificationProvider<Book
 
     @Override
     public Specification<Book> getSpecificationString(String[] params) {
-        return null;
+        throw new UnsupportedOperationException("Unsupported operation for filter by category");
     }
 
     @Override
     public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        return null;
-    }
-
-    @Override
-    public Specification<Book> getSpecificationLong(Long[] categoryIds) {
-        return (root, query, criteriaBuilder)
-                -> root.get(AUTHOR).in(Arrays.stream(categoryIds).toArray());
+        throw new UnsupportedOperationException("Unsupported operation for filter by category");
     }
 }

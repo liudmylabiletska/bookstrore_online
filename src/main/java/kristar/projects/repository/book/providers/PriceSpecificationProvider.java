@@ -24,17 +24,17 @@ public class PriceSpecificationProvider implements SpecificationProvider<Book> {
     }
 
     @Override
-    public Specification<Book> getSpecificationLong(Long[] ids) {
-        throw new UnsupportedOperationException("Unsupported operation for titles' filter");
-    }
-
-    @Override
     public String getKey() {
         return PRICE;
     }
 
     @Override
+    public Specification<Book> getSpecificationLong(Long[] ids) {
+        throw new UnsupportedOperationException("Unsupported operation for filter by price");
+    }
+
+    @Override
     public Specification<Book> getSpecificationString(String[] params) {
-        throw new UnsupportedOperationException("Unsupported operation for prices' filter");
+        throw new UnsupportedOperationException("Unsupported operation for filter by price");
     }
 }

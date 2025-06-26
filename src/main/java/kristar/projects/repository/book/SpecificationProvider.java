@@ -3,12 +3,12 @@ package kristar.projects.repository.book;
 import java.math.BigDecimal;
 import org.springframework.data.jpa.domain.Specification;
 
-public interface SpecificationProvider<T> {
-    String getKey();
+public abstract interface SpecificationProvider<T> {
+    public String getKey();
 
-    Specification<T> getSpecificationString(String[] params);
+    abstract Specification<T> getSpecificationString(String[] params);
 
-    Specification<T> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice);
+    abstract Specification<T> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice);
 
-    Specification<T> getSpecificationLong(Long[] ids);
+    abstract Specification<T> getSpecificationLong(Long[] ids);
 }

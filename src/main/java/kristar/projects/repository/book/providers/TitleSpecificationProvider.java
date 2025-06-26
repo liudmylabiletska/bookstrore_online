@@ -29,17 +29,18 @@ public class TitleSpecificationProvider implements SpecificationProvider<Book> {
     }
 
     @Override
+    public String getKey() {
+        return TITLE;
+    }
+
+    @Override
     public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        throw new UnsupportedOperationException("Unsupported operation for titles' filter");
+        throw new UnsupportedOperationException("Unsupported operation for filter by title");
     }
 
     @Override
     public Specification<Book> getSpecificationLong(Long[] ids) {
-        throw new UnsupportedOperationException("Unsupported operation for titles' filter");
+        throw new UnsupportedOperationException("Unsupported operation for filter by title");
     }
 
-    @Override
-    public String getKey() {
-        return TITLE;
-    }
 }

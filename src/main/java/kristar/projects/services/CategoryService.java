@@ -1,17 +1,18 @@
 package kristar.projects.services;
 
-import kristar.projects.dto.categorydto.CategoryDto;
+import kristar.projects.dto.categorydto.CategoryRequestDto;
+import kristar.projects.dto.categorydto.CategoryResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CategoryService {
-    Page<CategoryDto> findAll(Pageable pageable);
+    Page<CategoryResponseDto> findAll(Pageable pageable);
 
-    CategoryDto getById(Long id);
+    CategoryResponseDto getById(Long id);
 
-    CategoryDto save(CategoryDto categoryDto);
+    CategoryResponseDto save(CategoryRequestDto categoryRequestDto);
 
-    CategoryDto update(Long id, CategoryDto categoryDto);
+    CategoryResponseDto update(Long id, CategoryRequestDto categoryRequestDto);
 
     void deleteById(Long id);
 }

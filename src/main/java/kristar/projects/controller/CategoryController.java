@@ -4,7 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kristar.projects.dto.bookdto.BookDtoWithoutCategoryIds;
-import kristar.projects.dto.categorydto.CategoryDto;
+import kristar.projects.dto.categorydto.CategoryRequestDto;
+import kristar.projects.dto.categorydto.CategoryResponseDto;
 import kristar.projects.services.BookService;
 import kristar.projects.services.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -36,24 +37,21 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create new books' category",
             description = "Creation a new category of books")
-    public CategoryDto createCategory(@RequestBody @Valid CategoryDto categoryDto) {
-        return categoryService.save(categoryDto);
+    public CategoryResponseDto createCategory(
+            @RequestBody @Valid CategoryRequestDto categoryRequestDto) {
+        return categoryService.save(categoryRequestDto);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all categories",
             description = "Getting all available book categories")
-    public Page<CategoryDto> getAll(@ParameterObject Pageable pageable) {
+    public Page<CategoryResponseDto> getAll(@ParameterObject Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get category by ID", description = "Getting a category by it's ID")
-    public CategoryDto getCategoryById(@PathVariable Long id) {
+    public CategoryResponseDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
 
@@ -62,11 +60,11 @@ public class CategoryController {
     @PatchMapping("/{id}")
     @Operation(summary = "Update a category by id",
             description = "Updating book category by id")
-    public CategoryDto updateCategory(
+    public CategoryResponseDto updateCategory(
             @PathVariable Long id,
-            @RequestBody @Valid CategoryDto categoryDto
+            @RequestBody @Valid CategoryRequestDto categoryRequestDto
     ) {
-        return categoryService.update(id, categoryDto);
+        return categoryService.update(id, categoryRequestDto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -78,9 +76,7 @@ public class CategoryController {
         categoryService.deleteById(id);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}/books")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get books by category ID",
             description = "Returns a list of books that belong to the specified category")
     public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
