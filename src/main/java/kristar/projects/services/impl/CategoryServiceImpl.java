@@ -36,8 +36,8 @@ public class CategoryServiceImpl implements kristar.projects.services.CategorySe
     @Override
     public CategoryResponseDto save(CategoryRequestDto categoryRequestDto) {
         Category category = categoryMapper.toEntity(categoryRequestDto);
-        Category savedCategory = categoryRepository.save(category);
-        return categoryMapper.toDto(savedCategory);
+        categoryRepository.save(category);
+        return categoryMapper.toDto(category);
     }
 
     @Override
@@ -47,9 +47,9 @@ public class CategoryServiceImpl implements kristar.projects.services.CategorySe
                         + "not found with id: " + id));
         categoryMapper.updateCategoryFromDto(category, categoryRequestDto);
 
-        Category savedCategory = categoryRepository.save(category);
+        categoryRepository.save(category);
 
-        return categoryMapper.toDto(savedCategory);
+        return categoryMapper.toDto(category);
     }
 
     @Override
