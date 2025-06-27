@@ -1,5 +1,8 @@
 package kristar.projects.repository.book.providers;
 
+import jakarta.persistence.criteria.Predicate;
+import java.util.Arrays;
+import java.util.List;
 import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.exception.DataProcessingException;
 import kristar.projects.model.Book;
@@ -20,7 +23,16 @@ public class TitleSpecificationProvider implements UnifiedSpecificationProvider<
         if (searchParametersDto.title() == null || searchParametersDto.title().length == 0) {
             throw new DataProcessingException("Search parameter by title is empty");
         }
-        return (root, query, cb) -> root.get(TITLE)
-                .in((Object[]) searchParametersDto.title());
+        String[] titles = searchParametersDto.author();
+
+        return (root, query, cb) -> {
+            List<Predicate> predicates = Arrays.stream(titles)
+                    .filter(author -> author != null && !author.isBlank())
+                    .map(author -> cb.like(cb.lower(root.get("title")),
+                            "%" + author.toLowerCase().trim() + "%"))
+                    .toList();
+
+            return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));
+        };
     }
 }

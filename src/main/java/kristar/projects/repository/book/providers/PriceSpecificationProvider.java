@@ -22,7 +22,7 @@ public class PriceSpecificationProvider implements UnifiedSpecificationProvider<
         BigDecimal max = searchParametersDto.maxPrice();
 
         if (min == null || max == null) {
-            throw new DataProcessingException("Search parameter by category id is empty");
+            throw new DataProcessingException("Search parameter by price is empty");
         }
 
         if (min.compareTo(BigDecimal.ZERO) < 0 || max.compareTo(BigDecimal.ZERO) < 0) {

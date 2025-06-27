@@ -35,8 +35,8 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create new books' category",
-            description = "Creation a new category of books")
+    @Operation(summary = "Create new books' categoryIds",
+            description = "Creation a new categoryIds of books")
     public CategoryResponseDto createCategory(
             @RequestBody @Valid CategoryRequestDto categoryRequestDto) {
         return categoryService.save(categoryRequestDto);
@@ -52,7 +52,7 @@ public class CategoryController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
-    @Operation(summary = "Get category by ID", description = "Getting a category by it's ID")
+    @Operation(summary = "Get categoryIds by ID", description = "Getting a categoryIds by it's ID")
     public CategoryResponseDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
@@ -60,8 +60,8 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
-    @Operation(summary = "Update a category by id",
-            description = "Updating book category by id")
+    @Operation(summary = "Update a categoryIds by id",
+            description = "Updating book categoryIds by id")
     public CategoryResponseDto updateCategory(
             @PathVariable Long id,
             @RequestBody @Valid CategoryRequestDto categoryRequestDto
@@ -72,15 +72,15 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete a category",
-            description = "Performs a soft delete on the specified book category")
+    @Operation(summary = "Delete a categoryIds",
+            description = "Performs a soft delete on the specified book categoryIds")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
 
     @GetMapping("/{id}/books")
-    @Operation(summary = "Get books by category ID",
-            description = "Returns a list of books that belong to the specified category")
+    @Operation(summary = "Get books by categoryIds ID",
+            description = "Returns a list of books that belong to the specified categoryIds")
     public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(
             @PathVariable Long id,
             @ParameterObject Pageable pageable

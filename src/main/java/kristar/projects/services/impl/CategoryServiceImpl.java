@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements kristar.projects.services.CategorySe
     public CategoryResponseDto getById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can not"
-                        + " find category with id " + id));
+                        + " find categoryIds with id " + id));
         return categoryMapper.toDto(category);
     }
 

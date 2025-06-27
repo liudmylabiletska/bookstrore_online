@@ -14,12 +14,22 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     private final List<UnifiedSpecificationProvider<Book>> providers;
 
     @Override
-    public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
+    public Specification<Book> build(BookSearchParametersDto searchParameters) {
         Specification<Book> spec = Specification.anyOf();
+
         for (UnifiedSpecificationProvider<Book> provider : providers) {
-            Specification<Book> partial = provider.build(searchParametersDto);
-            if (partial != null) {
-                spec = spec.and(partial);
+            try {
+                Specification<Book> partial = provider.build(searchParameters);
+                if (partial != null) {
+                    System.out.println("✅ Provider [" + provider.getKey() + "] applied.");
+                    spec = spec.and(partial);
+                } else {
+                    System.out.println("⏭ Provider [" + provider.getKey()
+                            + "] skipped (null spec).");
+                }
+            } catch (Exception e) {
+                System.err.println("❌ Provider [" + provider.getKey()
+                        + "] failed: " + e.getMessage());
             }
         }
         return spec;

@@ -31,6 +31,6 @@ public class CreateBookRequestDto {
     @Size(max = 500, message = "URL of cover image must be not longer more than 500 characters")
     private String coverImage;
     @NotEmpty(message = "Category IDs cannot be null")
-    @Size(min = 1, message = "At least one category ID is required")
+    @Size(min = 1, message = "At least one categoryIds ID is required")
     private Set<Long> categoryIds;
 }
