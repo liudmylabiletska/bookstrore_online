@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Component("categoryIds")
 public class CategorySpecificationProvider implements UnifiedSpecificationProvider<Book> {
     public static final String CATEGORY = "categoryIds";
+    public static final String CATEGORIES_TABLE = "categories";
+    public static final String ID_CATEGORIES_TABLE = "id";
 
     @Override
     public String getKey() {
@@ -23,9 +25,9 @@ public class CategorySpecificationProvider implements UnifiedSpecificationProvid
             throw new DataProcessingException("Search parameter by categoryIds id is empty");
         }
         return (root, query, cb) -> {
-            Join<Object, Object> join = root.join("categories");
+            Join<Object, Object> join = root.join(CATEGORIES_TABLE);
 
-            return join.get("id").in((Object[]) categoryIds);
+            return join.get(ID_CATEGORIES_TABLE).in((Object[]) categoryIds);
         };
     }
 }

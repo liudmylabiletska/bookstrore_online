@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 @Component("price")
 public class PriceSpecificationProvider implements UnifiedSpecificationProvider<Book> {
-    public static final String PRICE = "price";
+    public static final String PRICE_FIELD = "price";
 
     @Override
     public String getKey() {
-        return PRICE;
+        return PRICE_FIELD;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PriceSpecificationProvider implements UnifiedSpecificationProvider<
                     + "less than or equal to max price.");
         }
 
-        return (root, query, cb) -> cb.between(root.get("price"), min, max);
+        return (root, query, cb) -> cb.between(root.get(PRICE_FIELD), min, max);
     }
 }
 

@@ -11,25 +11,25 @@ import org.springframework.stereotype.Component;
 
 @Component("title")
 public class TitleSpecificationProvider implements UnifiedSpecificationProvider<Book> {
-    public static final String TITLE = "title";
+    public static final String TITLE_FIELD = "title";
 
     @Override
     public String getKey() {
-        return TITLE;
+        return TITLE_FIELD;
     }
 
     @Override
     public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
-        if (searchParametersDto.title() == null || searchParametersDto.title().length == 0) {
+        if (searchParametersDto.titles() == null || searchParametersDto.titles().length == 0) {
             throw new DataProcessingException("Search parameter by title is empty");
         }
-        String[] titles = searchParametersDto.author();
+        String[] titles = searchParametersDto.titles();
 
         return (root, query, cb) -> {
             List<Predicate> predicates = Arrays.stream(titles)
-                    .filter(author -> author != null && !author.isBlank())
-                    .map(author -> cb.like(cb.lower(root.get("title")),
-                            "%" + author.toLowerCase().trim() + "%"))
+                    .filter(title -> title != null && !title.isBlank())
+                    .map(title -> cb.like(cb.lower(root.get(TITLE_FIELD)),
+                            "%" + title.toLowerCase().trim() + "%"))
                     .toList();
 
             return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));
