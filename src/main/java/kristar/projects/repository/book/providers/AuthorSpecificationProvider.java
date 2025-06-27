@@ -1,23 +1,15 @@
 package kristar.projects.repository.book.providers;
 
-import static kristar.projects.repository.book.BookSpecificationBuilder.AUTHOR;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
+import kristar.projects.dto.bookdto.BookSearchParametersDto;
+import kristar.projects.exception.DataProcessingException;
 import kristar.projects.model.Book;
-import kristar.projects.repository.book.SpecificationProvider;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-@Component
-public class AuthorSpecificationProvider implements SpecificationProvider<Book> {
-
-    @Override
-    public Specification<Book> getSpecificationString(String[] params) {
-
-        return (root, query, criteriaBuilder)
-                -> root.get(AUTHOR).in(Arrays.stream(params).toArray());
-    }
+@Component("author")
+public class AuthorSpecificationProvider
+        implements UnifiedSpecificationProvider<Book> {
+    public static final String AUTHOR = "author";
 
     @Override
     public String getKey() {
@@ -25,12 +17,11 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
     }
 
     @Override
-    public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        throw new UnsupportedOperationException("Unsupported operation for filter by author");
-    }
-
-    @Override
-    public Specification<Book> getSpecificationLong(Long[] ids) {
-        throw new UnsupportedOperationException("Unsupported operation for filter by author");
+    public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
+        if (searchParametersDto.author() == null || searchParametersDto.author().length == 0) {
+            throw new DataProcessingException("Search parameter by author is empty");
+        }
+        return (root, query, cb) -> root.get(AUTHOR)
+                .in((Object[]) searchParametersDto.author());
     }
 }

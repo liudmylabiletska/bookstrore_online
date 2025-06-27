@@ -1,27 +1,15 @@
 package kristar.projects.repository.book.providers;
 
-import static kristar.projects.repository.book.BookSpecificationBuilder.PRICE;
-
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 import java.math.BigDecimal;
+import kristar.projects.dto.bookdto.BookSearchParametersDto;
+import kristar.projects.exception.DataProcessingException;
 import kristar.projects.model.Book;
-import kristar.projects.repository.book.SpecificationProvider;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-@Component
-public class PriceSpecificationProvider implements SpecificationProvider<Book> {
-    @Override
-    public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-
-        return (Root<Book> root,
-                CriteriaQuery<?> query,
-                CriteriaBuilder criteriaBuilder)
-                -> criteriaBuilder.between(root.get(PRICE),
-                minPrice, maxPrice);
-    }
+@Component("price")
+public class PriceSpecificationProvider implements UnifiedSpecificationProvider<Book> {
+    public static final String PRICE = "price";
 
     @Override
     public String getKey() {
@@ -29,12 +17,24 @@ public class PriceSpecificationProvider implements SpecificationProvider<Book> {
     }
 
     @Override
-    public Specification<Book> getSpecificationLong(Long[] ids) {
-        throw new UnsupportedOperationException("Unsupported operation for filter by price");
-    }
+    public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
+        BigDecimal min = searchParametersDto.minPrice();
+        BigDecimal max = searchParametersDto.maxPrice();
 
-    @Override
-    public Specification<Book> getSpecificationString(String[] params) {
-        throw new UnsupportedOperationException("Unsupported operation for filter by price");
+        if (min == null || max == null) {
+            throw new DataProcessingException("Search parameter by category id is empty");
+        }
+
+        if (min.compareTo(BigDecimal.ZERO) < 0 || max.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Prices must be non-negative.");
+        }
+
+        if (max.compareTo(min) < 0) {
+            throw new IllegalArgumentException("Min price must be "
+                    + "less than or equal to max price.");
+        }
+
+        return (root, query, cb) -> cb.between(root.get("price"), min, max);
     }
 }
+
