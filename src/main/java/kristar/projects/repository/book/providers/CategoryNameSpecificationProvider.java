@@ -2,14 +2,13 @@ package kristar.projects.repository.book.providers;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import java.util.Arrays;
+import java.util.List;
 import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.exception.DataProcessingException;
 import kristar.projects.model.Book;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Component("categoryNames")
 public class CategoryNameSpecificationProvider implements UnifiedSpecificationProvider<Book> {
@@ -33,12 +32,11 @@ public class CategoryNameSpecificationProvider implements UnifiedSpecificationPr
             Join<Object, Object> join = root.join(CATEGORIES_TABLE);
 
             List<Predicate> predicates = Arrays.stream(categoryNames)
-                .filter(name -> name != null && !name.isBlank())
-                .map(name -> cb.like(
-                    cb.lower(join.get(CATEGORY_NAME_FIELD)),
+                    .filter(name -> name != null && !name.isBlank())
+                    .map(name -> cb.like(cb.lower(join.get(CATEGORY_NAME_FIELD)),
                     "%" + name.toLowerCase().trim() + "%"
                 ))
-                .toList();
+                    .toList();
 
             return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));
         };
