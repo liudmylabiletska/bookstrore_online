@@ -78,10 +78,11 @@ public class BookController {
             @RequestParam(required = false) Long[] categoryIds,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) String[] categoryNames,
             @ParameterObject Pageable pageable
     ) {
         BookSearchParametersDto searchParameters = new BookSearchParametersDto(title, author,
-                categoryIds, minPrice, maxPrice);
+                categoryIds, categoryNames, minPrice, maxPrice);
         return bookService.search(searchParameters, pageable);
     }
 

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component("categoryIds")
-public class CategorySpecificationProvider implements UnifiedSpecificationProvider<Book> {
+public class CategoryIdSpecificationProvider implements UnifiedSpecificationProvider<Book> {
     public static final String CATEGORY = "categoryIds";
     public static final String CATEGORIES_TABLE = "categories";
     public static final String ID_CATEGORIES_TABLE = "id";
