@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19-insert-carts-if-missing
+      author: ksavchenko
+      runOnChange: true
+      changes:
+        - sql:
+            splitStatements: false
+            sql: >
+              INSERT INTO shopping_carts (user_id)
+              SELECT u.id FROM users u
+              WHERE NOT EXISTS (
+                SELECT 1 FROM shopping_carts c WHERE c.user_id = u.id
+              )
+
+      rollback:
+        - sql:
+            sql: DELETE FROM shopping_carts WHERE user_id IN (1, 2, 3, 4, 5)
