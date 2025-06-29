@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: assign-drama-to-all-books
+      author: ksavchenko
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM categories WHERE name = 'Drama'"
+      changes:
+        - sql:
+            splitStatements: false
+            sql: >
+              INSERT INTO books_categories (book_id, category_id)
+              SELECT b.id, (
+                SELECT c.id FROM categories c WHERE c.name = 'Drama' LIMIT 1
+              )
+              FROM books b;

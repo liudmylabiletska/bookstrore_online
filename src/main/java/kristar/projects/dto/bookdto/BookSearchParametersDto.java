@@ -3,8 +3,14 @@ package kristar.projects.dto.bookdto;
 import java.math.BigDecimal;
 
 public record BookSearchParametersDto(
-        String[] title,
-        String[] author,
+        String[] titles,
+        String[] authors,
+        Long[] categoryIds,
+        String[] categoryNames,
         BigDecimal minPrice,
-        BigDecimal maxPrice) {
+        BigDecimal maxPrice
+) {
+    public String[] categoryNames() {
+        return categoryNames;
+    }
 }

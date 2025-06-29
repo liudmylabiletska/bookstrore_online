@@ -9,7 +9,7 @@ import kristar.projects.dto.userdto.UserRegistrationRequestDto;
 import kristar.projects.dto.userdto.UserResponseDto;
 import kristar.projects.exception.RegistrationException;
 import kristar.projects.security.AuthenticationService;
-import kristar.projects.service.UserService;
+import kristar.projects.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

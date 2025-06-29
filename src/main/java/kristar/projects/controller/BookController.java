@@ -3,12 +3,13 @@ package kristar.projects.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
 import kristar.projects.dto.bookdto.BookDto;
 import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.dto.bookdto.CreateBookRequestDto;
 import kristar.projects.dto.bookdto.UpdateBookRequestDto;
 import kristar.projects.model.User;
-import kristar.projects.service.BookService;
+import kristar.projects.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +36,7 @@ public class BookController {
 
     private final BookService bookService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     @Operation(summary = "Get all books", description = "Get a list of all available books")
     public Page<BookDto> findAll(@ParameterObject Authentication authentication,
@@ -42,6 +45,7 @@ public class BookController {
         return bookService.getAll(user.getEmail(), pageable);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{id}")
     @Operation(summary = "Get book by id", description = "Getting the book found by id")
     public BookDto getBookById(@PathVariable Long id) {
@@ -51,7 +55,7 @@ public class BookController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create  new book", description = "Creation a new book")
+    @Operation(summary = "Create new book", description = "Creation a new book")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
@@ -64,13 +68,21 @@ public class BookController {
         bookService.deleteById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/search")
     @Operation(summary = "Search all books by parameters", description = "Searching booksDto/books"
             + " by parameters as a list")
     public Page<BookDto> search(
-            @ParameterObject BookSearchParametersDto searchParameters,
+            @RequestParam(required = false) String[] title,
+            @RequestParam(required = false) String[] author,
+            @RequestParam(required = false) Long[] categoryIds,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) String[] categoryNames,
             @ParameterObject Pageable pageable
     ) {
+        BookSearchParametersDto searchParameters = new BookSearchParametersDto(title, author,
+                categoryIds, categoryNames, minPrice, maxPrice);
         return bookService.search(searchParameters, pageable);
     }
 

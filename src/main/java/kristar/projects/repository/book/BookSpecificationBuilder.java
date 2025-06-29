@@ -1,8 +1,9 @@
 package kristar.projects.repository.book;
 
-import java.math.BigDecimal;
+import java.util.List;
 import kristar.projects.dto.bookdto.BookSearchParametersDto;
 import kristar.projects.model.Book;
+import kristar.projects.repository.book.providers.UnifiedSpecificationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -10,36 +11,26 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
-    public static final String TITLE = "title";
-    public static final String AUTHOR = "author";
-    public static final String PRICE = "price";
-
-    private final SpecificationProviderManager<Book> bookSpecificationProviderManager;
+    private final List<UnifiedSpecificationProvider<Book>> providers;
 
     @Override
-    public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
+    public Specification<Book> build(BookSearchParametersDto searchParameters) {
         Specification<Book> spec = Specification.anyOf();
-        if (searchParametersDto.title() != null
-                && searchParametersDto.title().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(TITLE)
-                    .getSpecificationString(searchParametersDto.title()));
-        }
-        if (searchParametersDto.author() != null
-                && searchParametersDto.author().length > 0) {
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(AUTHOR)
-                    .getSpecificationString(searchParametersDto.author()));
-        }
-        if (searchParametersDto.minPrice() != null && searchParametersDto.maxPrice() != null) {
-            if (searchParametersDto.minPrice().compareTo(BigDecimal.ZERO) < 0
-                    && searchParametersDto.maxPrice().compareTo(BigDecimal.ZERO) < 0
-                    && searchParametersDto.maxPrice().compareTo(searchParametersDto.minPrice()) < 0
-            ) {
-                throw new IllegalArgumentException("Check min and max prices, it must be positive."
-                        + " And Min price cannot be greater than max price");
+
+        for (UnifiedSpecificationProvider<Book> provider : providers) {
+            try {
+                Specification<Book> partial = provider.build(searchParameters);
+                if (partial != null) {
+                    System.out.println("✅ Provider [" + provider.getKey() + "] applied.");
+                    spec = spec.and(partial);
+                } else {
+                    System.out.println("⏭ Provider [" + provider.getKey()
+                            + "] skipped (null spec).");
+                }
+            } catch (Exception e) {
+                System.err.println("❌ Provider [" + provider.getKey()
+                        + "] failed: " + e.getMessage());
             }
-            spec = spec.and(bookSpecificationProviderManager.getSpecificationProvider(PRICE)
-                    .getSpecificationPrice(searchParametersDto.minPrice(),
-                            searchParametersDto.maxPrice()));
         }
         return spec;
     }

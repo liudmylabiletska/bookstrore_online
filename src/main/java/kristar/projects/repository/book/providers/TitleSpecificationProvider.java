@@ -1,40 +1,38 @@
 package kristar.projects.repository.book.providers;
 
-import static kristar.projects.repository.book.BookSpecificationBuilder.TITLE;
-
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
+import kristar.projects.dto.bookdto.BookSearchParametersDto;
+import kristar.projects.exception.DataProcessingException;
 import kristar.projects.model.Book;
-import kristar.projects.repository.book.SpecificationProvider;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-@Component
-public class TitleSpecificationProvider implements SpecificationProvider<Book> {
-
-    @Override
-    public Specification<Book> getSpecificationString(String[] params) {
-
-        return new Specification<Book>() {
-            @Override
-            public Predicate toPredicate(Root<Book> root, CriteriaQuery<?> query,
-                                         CriteriaBuilder criteriaBuilder) {
-                return root.get(TITLE).in(Arrays.stream(params).toArray());
-            }
-        };
-    }
-
-    @Override
-    public Specification<Book> getSpecificationPrice(BigDecimal minPrice, BigDecimal maxPrice) {
-        throw new UnsupportedOperationException("Unsupported operation for titles' filter");
-    }
+@Component("title")
+public class TitleSpecificationProvider implements UnifiedSpecificationProvider<Book> {
+    public static final String TITLE_FIELD = "title";
 
     @Override
     public String getKey() {
-        return TITLE;
+        return TITLE_FIELD;
+    }
+
+    @Override
+    public Specification<Book> build(BookSearchParametersDto searchParametersDto) {
+        if (searchParametersDto.titles() == null || searchParametersDto.titles().length == 0) {
+            throw new DataProcessingException("Search parameter by title is empty");
+        }
+        String[] titles = searchParametersDto.titles();
+
+        return (root, query, cb) -> {
+            List<Predicate> predicates = Arrays.stream(titles)
+                    .filter(title -> title != null && !title.isBlank())
+                    .map(title -> cb.like(cb.lower(root.get(TITLE_FIELD)),
+                            "%" + title.toLowerCase().trim() + "%"))
+                    .toList();
+
+            return predicates.isEmpty() ? null : cb.or(predicates.toArray(new Predicate[0]));
+        };
     }
 }

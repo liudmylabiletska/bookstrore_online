@@ -1,4 +1,4 @@
-package kristar.projects.service;
+package kristar.projects.services.impl;
 
 import static kristar.projects.model.RoleName.USER;
 
@@ -12,6 +12,7 @@ import kristar.projects.model.Role;
 import kristar.projects.model.User;
 import kristar.projects.repository.role.RoleRepository;
 import kristar.projects.repository.user.UserRepository;
+import kristar.projects.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
