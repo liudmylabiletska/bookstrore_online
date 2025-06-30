@@ -1,13 +1,11 @@
 package kristar.projects.dto.shoppingcartdto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record AddCartItemRequestDto(
-        @NotNull
-        @Min(1)
+        @Positive
         Long bookId,
-        @Min(1)
+        @Positive
         int quantity
 ) {
 }

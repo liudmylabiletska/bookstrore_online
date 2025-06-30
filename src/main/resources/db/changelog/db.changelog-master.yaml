@@ -35,5 +35,3 @@ databaseChangeLog:
       file: db/changelog/changes/17-shopping-carts-fix-is_deleted-type.yaml
   - include:
       file: db/changelog/changes/18-cart-items-fix-is_deleted-type.yaml
-  - include:
-      file: db/changelog/changes/19-insert-carts-if-missing.yaml

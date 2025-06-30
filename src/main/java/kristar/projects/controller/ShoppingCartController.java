@@ -11,6 +11,7 @@ import kristar.projects.services.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "ShoppingCart management", description = "Endpoints for managing shoppingCarts")
 @RestController
-@RequestMapping("/shoppingCart")
+@RequestMapping("api/cart")
 @RequiredArgsConstructor
 public class ShoppingCartController {
 
@@ -33,14 +34,15 @@ public class ShoppingCartController {
             description = "Show shopping cart of user")
     @PreAuthorize("hasRole('USER')")
     @GetMapping
-    public ShoppingCartResponseDto getCart() throws AccessDeniedException {
+    public ShoppingCartResponseDto getCart(Authentication authentication)
+            throws AccessDeniedException {
         return shoppingCartService.getCartForCurrentUser();
     }
 
     @Operation(summary = "Add book to the shopping cart",
             description = "Adding book to the shopping cart")
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("/add")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCartResponseDto addToCart(@RequestBody @Valid AddCartItemRequestDto request)
             throws AccessDeniedException {
@@ -50,7 +52,7 @@ public class ShoppingCartController {
     @Operation(summary = "Update quantity of a book in the shopping cart",
             description = "Updating quantity of a book in the shopping cart")
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/items/{itemId}")
+    @PutMapping("/cart-items/{itemId}")
     public ShoppingCartResponseDto updateItem(@PathVariable Long itemId,
                                               @RequestBody @Valid UpdateCartItemRequestDto request
     ) {
@@ -60,7 +62,7 @@ public class ShoppingCartController {
     @Operation(summary = "Remove a book from the shopping cart",
             description = "Removing a book from the shopping cart")
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("/items/{itemId}")
+    @DeleteMapping("/cart-items/{itemId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeItem(@PathVariable Long itemId) {
         shoppingCartService.removeCartItem(itemId);

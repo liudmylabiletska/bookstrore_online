@@ -17,7 +17,9 @@ import kristar.projects.services.ShoppingCartService;
 import kristar.projects.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -53,23 +55,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseThrow(() -> new EntityNotFoundException("Can not found Book with"
                         + " requested id " + itemRequestDto.bookId()));
 
-        CartItem cartItem = shoppingCart.getCartItems().stream()
-                .filter(item -> item.getBook().getId().equals(book.getId()))
-                .findFirst()
-                .orElseGet(() -> createCartItem(shoppingCart, book));
+        CartItem cartItem = cartItemRepository.findByCartIdAndBookId(
+                shoppingCart.getId(),
+                book.getId()).orElseGet(() -> createCartItem(shoppingCart, book));
         cartItem.setQuantity(cartItem.getQuantity() + itemRequestDto.quantity());
+
         shoppingCartRepository.save(shoppingCart);
 
         return shoppingCartMapper.toDto(shoppingCart);
-    }
-
-    private CartItem createCartItem(ShoppingCart shoppingCart, Book book) {
-        CartItem cartItem = new CartItem();
-        cartItem.setBook(book);
-        cartItem.setShoppingCart(shoppingCart);
-        cartItem.setQuantity(1);
-        shoppingCart.getCartItems().add(cartItem);
-        return cartItem;
     }
 
     @Override
@@ -89,5 +82,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = cartItem.getShoppingCart();
         shoppingCart.getCartItems().remove(cartItem);
         shoppingCartRepository.save(shoppingCart);
+    }
+
+    private CartItem createCartItem(ShoppingCart shoppingCart, Book book) {
+        CartItem cartItem = new CartItem();
+        cartItem.setBook(book);
+        cartItem.setShoppingCart(shoppingCart);
+        cartItem.setQuantity(1);
+        shoppingCart.getCartItems().add(cartItem);
+        return cartItem;
     }
 }
