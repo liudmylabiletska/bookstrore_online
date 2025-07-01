@@ -32,7 +32,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartResponseDto getCartForCurrentUser() {
         User currentUser = currentUserProvider.getCurrentUser();
         ShoppingCart shoppingCart = shoppingCartRepository.findWithItemsByUserId(
-                currentUser.getId()).orElseGet(() -> createCartForUser(currentUser));
+                currentUser.getId()).orElseThrow(() -> new EntityNotFoundException("Shopping "
+                + "cart not found for user " + currentUser.getId()));
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
@@ -96,10 +97,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCart createCartForUser(User user) {
+    public void createCartForUser(User user) {
         ShoppingCart cart = new ShoppingCart();
         cart.setUser(user);
-        return shoppingCartRepository.save(cart);
+        shoppingCartRepository.save(cart);
     }
 
     private CartItem createCartItem(ShoppingCart shoppingCart, Book book) {

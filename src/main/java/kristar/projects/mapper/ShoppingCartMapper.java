@@ -13,20 +13,16 @@ import kristar.projects.model.ShoppingCart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(config = MapperConfig.class, uses = ShoppingCartMapper.class)
+@Mapper(config = MapperConfig.class, uses = CartItemMapper.class)
 public interface ShoppingCartMapper {
-    @Mapping(source = "book.id", target = "bookId")
-    @Mapping(source = "book.title", target = "bookTitle")
-    CartItemResponseDto toDto(CartItem cartItem);
-
     @Mapping(source = "user.id", target = "userId")
     ShoppingCartResponseDto toDto(ShoppingCart cart);
 
-    default List<CartItemResponseDto> toDtoList(Set<CartItem> cartItems) {
+    default List<CartItemResponseDto> toDtoList(Set<CartItem> cartItems, CartItemMapper mapper) {
         return cartItems.stream()
                 .filter(item -> item.getQuantity() > 0)
                 .sorted(Comparator.comparing(item -> item.getBook().getTitle()))
-                .map(this::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
 

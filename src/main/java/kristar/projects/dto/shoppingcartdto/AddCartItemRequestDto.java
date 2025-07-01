@@ -8,7 +8,6 @@ public record AddCartItemRequestDto(
         @NotNull
         Long bookId,
         @Positive
-        @NotNull
         int quantity
 ) {
 }

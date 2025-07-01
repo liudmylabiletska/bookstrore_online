@@ -7,7 +7,7 @@ import kristar.projects.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapperConfig.class, uses = CategoryMapper.class)
+@Mapper(config = MapperConfig.class)
 public interface CategoryMapper {
     CategoryResponseDto toDto(Category category);
 
