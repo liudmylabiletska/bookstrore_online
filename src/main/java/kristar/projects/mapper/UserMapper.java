@@ -6,7 +6,7 @@ import kristar.projects.dto.userdto.UserResponseDto;
 import kristar.projects.model.User;
 import org.mapstruct.Mapper;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(config = MapperConfig.class, uses = UserMapper.class)
 public interface UserMapper {
     UserResponseDto toUserResponse(User user);
 
