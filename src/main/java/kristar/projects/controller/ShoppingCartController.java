@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "ShoppingCart management", description = "Endpoints for managing shoppingCarts")
 @RestController
-@RequestMapping("api/cart")
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class ShoppingCartController {
 
@@ -34,8 +34,7 @@ public class ShoppingCartController {
             description = "Show shopping cart of user")
     @PreAuthorize("hasRole('USER')")
     @GetMapping
-    public ShoppingCartResponseDto getCart(Authentication authentication)
-            throws AccessDeniedException {
+    public ShoppingCartResponseDto getCart(Authentication authentication) {
         return shoppingCartService.getCartForCurrentUser();
     }
 

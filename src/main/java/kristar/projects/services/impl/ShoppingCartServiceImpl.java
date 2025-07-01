@@ -1,6 +1,5 @@
 package kristar.projects.services.impl;
 
-import java.nio.file.AccessDeniedException;
 import kristar.projects.dto.shoppingcartdto.AddCartItemRequestDto;
 import kristar.projects.dto.shoppingcartdto.ShoppingCartResponseDto;
 import kristar.projects.dto.shoppingcartdto.UpdateCartItemRequestDto;
@@ -13,8 +12,8 @@ import kristar.projects.model.User;
 import kristar.projects.repository.book.BookRepository;
 import kristar.projects.repository.cartitem.CartItemRepository;
 import kristar.projects.repository.shoppingcart.ShoppingCartRepository;
+import kristar.projects.security.CurrentUserProvider;
 import kristar.projects.services.ShoppingCartService;
-import kristar.projects.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,31 +22,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-    private final UserService userService;
+    private final CurrentUserProvider currentUserProvider;
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final BookRepository bookRepository;
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public ShoppingCartResponseDto getCartForCurrentUser() throws AccessDeniedException {
-        User currenUser = userService.getCurrentUser();
+    public ShoppingCartResponseDto getCartForCurrentUser() {
+        User currentUser = currentUserProvider.getCurrentUser();
         ShoppingCart shoppingCart = shoppingCartRepository.findWithItemsByUserId(
-                currenUser.getId()).orElseGet(() -> {
-                    ShoppingCart newShoppingCart = new ShoppingCart();
-                    newShoppingCart.setUser(currenUser);
-                    return shoppingCartRepository.save(newShoppingCart);
-                });
+                currentUser.getId()).orElseGet(() -> createCartForUser(currentUser));
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
-    public ShoppingCartResponseDto addBookToCart(AddCartItemRequestDto itemRequestDto)
-            throws AccessDeniedException {
-        User currenUser = userService.getCurrentUser();
+    public ShoppingCartResponseDto addBookToCart(AddCartItemRequestDto itemRequestDto) {
+        User currentUser = currentUserProvider.getCurrentUser();
 
         ShoppingCart shoppingCart = shoppingCartRepository
-                .findWithItemsByUserId(currenUser.getId())
+                .findWithItemsByUserId(currentUser.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Can not found "
                         + "shoppingCart by current User"));
 
@@ -68,8 +62,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartResponseDto updateCartItem(Long cartItemId,
                                                   UpdateCartItemRequestDto itemRequestDto) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
-                () -> new EntityNotFoundException("Can not found cartItem with id " + cartItemId));
+        User currentUser = currentUserProvider.getCurrentUser();
+        ShoppingCart shoppingCart = shoppingCartRepository
+                .findWithItemsByUserId(currentUser.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Can not found "
+                        + "shoppingCart by current User"));
+        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(
+                        cartItemId,
+                        shoppingCart.getId()
+                )
+                .orElseThrow(() -> new EntityNotFoundException(("CartItem with id %d not found in"
+                        + " cart %d").formatted(cartItemId, shoppingCart.getId())));
         cartItem.setQuantity(itemRequestDto.quantity());
         cartItemRepository.save(cartItem);
         return shoppingCartMapper.toDto(cartItem.getShoppingCart());
@@ -77,11 +80,26 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void removeCartItem(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
-                () -> new EntityNotFoundException("Can not found cartItem with id " + cartItemId));
-        ShoppingCart shoppingCart = cartItem.getShoppingCart();
+        User currentUser = currentUserProvider.getCurrentUser();
+        ShoppingCart shoppingCart = shoppingCartRepository
+                .findWithItemsByUserId(currentUser.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Can not found "
+                        + "shoppingCart by current User"));
+        CartItem cartItem = cartItemRepository.findByIdAndShoppingCartId(
+                        cartItemId,
+                        shoppingCart.getId()
+                )
+                .orElseThrow(() -> new EntityNotFoundException(("CartItem with id %d not found"
+                        + " in cart %d").formatted(cartItemId, shoppingCart.getId())));
         shoppingCart.getCartItems().remove(cartItem);
         shoppingCartRepository.save(shoppingCart);
+    }
+
+    @Override
+    public ShoppingCart createCartForUser(User user) {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUser(user);
+        return shoppingCartRepository.save(cart);
     }
 
     private CartItem createCartItem(ShoppingCart shoppingCart, Book book) {
@@ -90,6 +108,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItem.setShoppingCart(shoppingCart);
         cartItem.setQuantity(1);
         shoppingCart.getCartItems().add(cartItem);
+        shoppingCartRepository.save(shoppingCart);
         return cartItem;
     }
 }

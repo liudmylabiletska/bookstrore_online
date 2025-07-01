@@ -2,6 +2,12 @@ databaseChangeLog:
   - changeSet:
       id: insert-roles
       author: ksavchenko
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          - tableExists:
+              tableName: roles
       changes:
         - insert:
             tableName: roles

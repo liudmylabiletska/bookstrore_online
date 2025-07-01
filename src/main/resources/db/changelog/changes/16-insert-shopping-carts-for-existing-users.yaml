@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 16-insert-shopping-carts-to-users
+      id: 16-insert-carts-for-existing-users
       author: ksavchenko
       changes:
         - sql:
