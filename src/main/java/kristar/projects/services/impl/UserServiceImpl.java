@@ -12,6 +12,7 @@ import kristar.projects.model.Role;
 import kristar.projects.model.User;
 import kristar.projects.repository.role.RoleRepository;
 import kristar.projects.repository.user.UserRepository;
+import kristar.projects.services.ShoppingCartService;
 import kristar.projects.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final ShoppingCartService shoppingCartService;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
@@ -45,6 +47,9 @@ public class UserServiceImpl implements UserService {
         userFromRequestDto.setRoles(roles);
 
         User savedUser = userRepository.save(userFromRequestDto);
+
+        shoppingCartService.createCartForUser(savedUser);
+
         return userMapper.toUserResponse(savedUser);
     }
 }

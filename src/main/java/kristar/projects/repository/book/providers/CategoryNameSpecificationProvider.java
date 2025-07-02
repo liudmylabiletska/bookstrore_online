@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class CategoryNameSpecificationProvider implements UnifiedSpecificationProvider<Book> {
     public static final String CATEGORY_NAMES = "categoryNames";
     public static final String CATEGORIES_TABLE = "categories";
-    public static final String CATEGORY_NAME_FIELD = "name";
+    public static final String NAME_CATEGORIES_TABLE = "name";
 
     @Override
     public String getKey() {
@@ -33,7 +33,7 @@ public class CategoryNameSpecificationProvider implements UnifiedSpecificationPr
 
             List<Predicate> predicates = Arrays.stream(categoryNames)
                     .filter(name -> name != null && !name.isBlank())
-                    .map(name -> cb.like(cb.lower(join.get(CATEGORY_NAME_FIELD)),
+                    .map(name -> cb.like(cb.lower(join.get(NAME_CATEGORIES_TABLE)),
                     "%" + name.toLowerCase().trim() + "%"
                 ))
                     .toList();
