@@ -1,8 +1,8 @@
 package kristar.projects.services.impl;
 
-import kristar.projects.dto.shoppingcartdto.AddCartItemRequestDto;
-import kristar.projects.dto.shoppingcartdto.ShoppingCartResponseDto;
-import kristar.projects.dto.shoppingcartdto.UpdateCartItemRequestDto;
+import kristar.projects.dto.shoppingcart.AddCartItemRequestDto;
+import kristar.projects.dto.shoppingcart.ShoppingCartResponseDto;
+import kristar.projects.dto.shoppingcart.UpdateCartItemRequestDto;
 import kristar.projects.exception.EntityNotFoundException;
 import kristar.projects.mapper.ShoppingCartMapper;
 import kristar.projects.model.Book;

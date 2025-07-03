@@ -1,4 +1,4 @@
-package kristar.projects.dto.userdto;
+package kristar.projects.dto.user;
 
 import jakarta.validation.Payload;
 import java.lang.annotation.ElementType;

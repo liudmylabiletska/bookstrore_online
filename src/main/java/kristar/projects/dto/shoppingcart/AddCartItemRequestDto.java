@@ -1,4 +1,4 @@
-package kristar.projects.dto.shoppingcartdto;
+package kristar.projects.dto.shoppingcart;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

@@ -1,4 +1,4 @@
-package kristar.projects.dto.shoppingcartdto;
+package kristar.projects.dto.shoppingcart;
 
 public record CartItemResponseDto(
         Long id,

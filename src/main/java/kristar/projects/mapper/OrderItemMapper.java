@@ -1,7 +1,7 @@
 package kristar.projects.mapper;
 
 import kristar.projects.config.MapperConfig;
-import kristar.projects.dto.orderdto.OrderItemResponseDto;
+import kristar.projects.dto.order.OrderItemResponseDto;
 import kristar.projects.model.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

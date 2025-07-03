@@ -4,8 +4,8 @@ import static kristar.projects.model.RoleName.USER;
 
 import java.util.HashSet;
 import java.util.Set;
-import kristar.projects.dto.userdto.UserRegistrationRequestDto;
-import kristar.projects.dto.userdto.UserResponseDto;
+import kristar.projects.dto.user.UserRegistrationRequestDto;
+import kristar.projects.dto.user.UserResponseDto;
 import kristar.projects.exception.RegistrationException;
 import kristar.projects.mapper.UserMapper;
 import kristar.projects.model.Role;

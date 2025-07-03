@@ -1,4 +1,4 @@
-package kristar.projects.dto.orderdto;
+package kristar.projects.dto.order;
 
 public record OrderItemResponseDto(
         Long id,

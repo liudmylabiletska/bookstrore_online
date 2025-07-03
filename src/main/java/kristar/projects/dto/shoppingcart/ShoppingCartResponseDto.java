@@ -1,4 +1,4 @@
-package kristar.projects.dto.shoppingcartdto;
+package kristar.projects.dto.shoppingcart;
 
 import java.util.Set;
 

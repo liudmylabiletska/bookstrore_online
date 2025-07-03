@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 19-create-order-items-table
+      id: 18-create-order-items-table
       author: konstantin
       changes:
         - createTable:
@@ -58,22 +58,3 @@ databaseChangeLog:
             referencedTableName: books
             referencedColumnNames: id
             constraintName: fk_order_items_book
-
-        - createIndex:
-            tableName: order_items
-            indexName: idx_order_items_order_id
-            columns:
-              - column:
-                  name: order_id
-
-        - createIndex:
-            tableName: order_items
-            indexName: idx_order_items_book_id
-            columns:
-              - column:
-                  name: book_id
-
-      rollback:
-        - dropTable:
-            tableName: order_items
-

@@ -1,4 +1,4 @@
-package kristar.projects.dto.bookdto;
+package kristar.projects.dto.book;
 
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;

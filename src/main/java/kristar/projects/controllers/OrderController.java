@@ -4,12 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import kristar.projects.dto.orderdto.CreateOrderRequestDto;
-import kristar.projects.dto.orderdto.OrderDto;
-import kristar.projects.dto.orderdto.OrderItemResponseDto;
-import kristar.projects.dto.orderdto.UpdateOrderStatusRequestDto;
-import kristar.projects.dto.orderdto.UserOrderResponseDto;
-import kristar.projects.model.Status;
+import kristar.projects.dto.order.CreateOrderRequestDto;
+import kristar.projects.dto.order.OrderDto;
+import kristar.projects.dto.order.OrderItemResponseDto;
+import kristar.projects.dto.order.UpdateOrderStatusRequestDto;
 import kristar.projects.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,7 +41,7 @@ public class OrderController {
             description = "Getting all orders of current user")
     @PreAuthorize("hasRole('USER')")
     @GetMapping
-    public List<UserOrderResponseDto> getOrdersOfCurrentUser() {
+    public List<OrderDto> getOrdersOfCurrentUser() {
         return orderService.findAllOrdersByCurrentUser();
     }
 
@@ -75,15 +73,5 @@ public class OrderController {
             @PathVariable Long itemId
     ) {
         return orderService.findItemByOrderIdItemId(orderId, itemId);
-    }
-
-    @Operation(
-            summary = "Get all orders by status",
-            description = "Returns all orders with the specified status"
-    )
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/status/{status}")
-    public List<UserOrderResponseDto> getOrdersByStatus(@PathVariable Status status) {
-        return orderService.findAllOrdersByStatus(status);
     }
 }

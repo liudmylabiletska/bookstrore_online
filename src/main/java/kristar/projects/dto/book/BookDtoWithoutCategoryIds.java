@@ -1,4 +1,4 @@
-package kristar.projects.dto.bookdto;
+package kristar.projects.dto.book;
 
 import java.math.BigDecimal;
 import lombok.Data;

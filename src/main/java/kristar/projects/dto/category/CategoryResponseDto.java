@@ -1,4 +1,4 @@
-package kristar.projects.dto.categorydto;
+package kristar.projects.dto.category;
 
 import lombok.Data;
 

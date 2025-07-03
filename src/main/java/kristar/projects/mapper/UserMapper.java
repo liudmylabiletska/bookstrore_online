@@ -1,8 +1,8 @@
 package kristar.projects.mapper;
 
 import kristar.projects.config.MapperConfig;
-import kristar.projects.dto.userdto.UserRegistrationRequestDto;
-import kristar.projects.dto.userdto.UserResponseDto;
+import kristar.projects.dto.user.UserRegistrationRequestDto;
+import kristar.projects.dto.user.UserResponseDto;
 import kristar.projects.model.User;
 import org.mapstruct.Mapper;
 

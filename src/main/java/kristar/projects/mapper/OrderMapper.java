@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import kristar.projects.config.MapperConfig;
-import kristar.projects.dto.orderdto.OrderDto;
-import kristar.projects.dto.orderdto.OrderItemResponseDto;
-import kristar.projects.dto.orderdto.UserOrderResponseDto;
+import kristar.projects.dto.order.OrderDto;
+import kristar.projects.dto.order.OrderItemResponseDto;
 import kristar.projects.model.Book;
 import kristar.projects.model.Order;
 import kristar.projects.model.OrderItem;
@@ -20,7 +19,7 @@ public interface OrderMapper {
     OrderDto toOrderDto(Order order);
 
     @Mapping(source = "user.id", target = "userId")
-    UserOrderResponseDto toUserOrderDto(Order order);
+    OrderDto toUserOrderDto(Order order);
 
     default List<OrderItemResponseDto> toDtoList(Set<OrderItem> orderItems,
                                                  OrderItemMapper mapper

@@ -1,7 +1,7 @@
 package kristar.projects.mapper;
 
 import kristar.projects.config.MapperConfig;
-import kristar.projects.dto.shoppingcartdto.CartItemResponseDto;
+import kristar.projects.dto.shoppingcart.CartItemResponseDto;
 import kristar.projects.model.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

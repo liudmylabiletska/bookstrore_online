@@ -1,4 +1,4 @@
-package kristar.projects.dto.userdto;
+package kristar.projects.dto.user;
 
 public record UserResponseDto(
         Long id,

@@ -3,7 +3,7 @@ package kristar.projects.repository.book.providers;
 import jakarta.persistence.criteria.Predicate;
 import java.util.Arrays;
 import java.util.List;
-import kristar.projects.dto.bookdto.BookSearchParametersDto;
+import kristar.projects.dto.book.BookSearchParametersDto;
 import kristar.projects.exception.DataProcessingException;
 import kristar.projects.model.Book;
 import org.springframework.data.jpa.domain.Specification;

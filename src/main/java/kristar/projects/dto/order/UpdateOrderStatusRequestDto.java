@@ -1,4 +1,4 @@
-package kristar.projects.dto.orderdto;
+package kristar.projects.dto.order;
 
 import jakarta.validation.constraints.NotNull;
 import kristar.projects.model.Status;
