@@ -1,8 +1,8 @@
 package kristar.projects.services;
 
-import kristar.projects.dto.shoppingcartdto.AddCartItemRequestDto;
-import kristar.projects.dto.shoppingcartdto.ShoppingCartResponseDto;
-import kristar.projects.dto.shoppingcartdto.UpdateCartItemRequestDto;
+import kristar.projects.dto.shoppingcart.AddCartItemRequestDto;
+import kristar.projects.dto.shoppingcart.ShoppingCartResponseDto;
+import kristar.projects.dto.shoppingcart.UpdateCartItemRequestDto;
 import kristar.projects.model.User;
 
 public interface ShoppingCartService {

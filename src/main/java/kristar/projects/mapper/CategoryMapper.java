@@ -1,8 +1,8 @@
 package kristar.projects.mapper;
 
 import kristar.projects.config.MapperConfig;
-import kristar.projects.dto.categorydto.CategoryRequestDto;
-import kristar.projects.dto.categorydto.CategoryResponseDto;
+import kristar.projects.dto.category.CategoryRequestDto;
+import kristar.projects.dto.category.CategoryResponseDto;
 import kristar.projects.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

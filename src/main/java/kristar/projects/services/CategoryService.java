@@ -1,7 +1,7 @@
 package kristar.projects.services;
 
-import kristar.projects.dto.categorydto.CategoryRequestDto;
-import kristar.projects.dto.categorydto.CategoryResponseDto;
+import kristar.projects.dto.category.CategoryRequestDto;
+import kristar.projects.dto.category.CategoryResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

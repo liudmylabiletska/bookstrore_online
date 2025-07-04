@@ -1,7 +1,7 @@
 package kristar.projects.repository.book;
 
 import java.util.List;
-import kristar.projects.dto.bookdto.BookSearchParametersDto;
+import kristar.projects.dto.book.BookSearchParametersDto;
 import kristar.projects.model.Book;
 import kristar.projects.repository.book.providers.UnifiedSpecificationProvider;
 import lombok.RequiredArgsConstructor;

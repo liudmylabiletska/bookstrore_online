@@ -1,8 +1,8 @@
 package kristar.projects.security;
 
 import jakarta.validation.Valid;
-import kristar.projects.dto.userdto.UserLoginRequestDto;
-import kristar.projects.dto.userdto.UserLoginResponseDto;
+import kristar.projects.dto.user.UserLoginRequestDto;
+import kristar.projects.dto.user.UserLoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
