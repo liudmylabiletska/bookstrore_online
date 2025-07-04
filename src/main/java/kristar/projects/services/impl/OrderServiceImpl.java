@@ -26,7 +26,6 @@ import kristar.projects.repository.orderitem.OrderItemRepository;
 import kristar.projects.repository.shoppingcart.ShoppingCartRepository;
 import kristar.projects.security.CurrentUserProvider;
 import kristar.projects.services.OrderService;
-import kristar.projects.services.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServiceImpl implements OrderService {
     private final CurrentUserProvider currentUserProvider;
     private final ShoppingCartRepository shoppingCartRepository;
-    private final ShoppingCartService shoppingCartService;
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
     private final OrderItemMapper orderItemMapper;
@@ -116,6 +114,14 @@ public class OrderServiceImpl implements OrderService {
                         + " current user not found with orderId " + orderId));
 
         return orderItemMapper.toDto(item);
+    }
+
+    @Override
+    public List<OrderDto> findAllOrdersByStatus(Status status) {
+        List<Order> orders = orderRepository.findAllByStatus(status);
+        return orders.stream()
+                .map(orderMapper::toUserOrderDto)
+                .toList();
     }
 
     private Order createNewOrder(User currentUser, String shippingAddress) {

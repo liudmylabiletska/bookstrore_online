@@ -8,6 +8,7 @@ import kristar.projects.dto.order.CreateOrderRequestDto;
 import kristar.projects.dto.order.OrderDto;
 import kristar.projects.dto.order.OrderItemResponseDto;
 import kristar.projects.dto.order.UpdateOrderStatusRequestDto;
+import kristar.projects.model.Status;
 import kristar.projects.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,8 +46,8 @@ public class OrderController {
         return orderService.findAllOrdersByCurrentUser();
     }
 
-    @Operation(summary = "Change status of order (admin only)",
-            description = "Change status of order")
+    @Operation(summary = "Change Status of order (admin only)",
+            description = "Change Status of order")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public OrderDto updateOrderStatus(
@@ -73,5 +74,12 @@ public class OrderController {
             @PathVariable Long itemId
     ) {
         return orderService.findItemByOrderIdItemId(orderId, itemId);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/status/{status}")
+    public List<OrderDto> getOrdersByStatus(@PathVariable Status status) {
+
+        return orderService.findAllOrdersByStatus(status);
     }
 }
