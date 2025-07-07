@@ -6,7 +6,7 @@ databaseChangeLog:
         - modifyDataType:
             tableName: books
             columnName: is_deleted
-            newDataType: bit(1)
+            newDataType: tinyint(1)
       rollback:
         - modifyDataType:
             tableName: books

@@ -2,6 +2,12 @@ databaseChangeLog:
   - changeSet:
       id: 16-insert-carts-for-existing-users
       author: ksavchenko
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        not:
+          - tableExists:
+              tableName: shopping_carts
       changes:
         - sql:
             splitStatements: false
