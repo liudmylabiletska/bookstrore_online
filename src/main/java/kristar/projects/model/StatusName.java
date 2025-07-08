@@ -1,6 +1,6 @@
 package kristar.projects.model;
 
-public enum Status {
+public enum StatusName {
     pending,
     processing,
     completed,

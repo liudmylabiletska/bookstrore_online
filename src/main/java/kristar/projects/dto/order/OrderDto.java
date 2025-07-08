@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
-import kristar.projects.model.Status;
+import kristar.projects.model.StatusName;
 
 public record OrderDto(
         Long id,
@@ -13,6 +13,6 @@ public record OrderDto(
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime orderDate,
         BigDecimal total,
-        Status status
+        StatusName status
 ) {
 }
