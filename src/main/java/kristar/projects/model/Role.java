@@ -22,7 +22,7 @@ public class Role implements GrantedAuthority {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_name", nullable = false, unique = true)
+    @Column(name = "role_name", columnDefinition = "VARCHAR(50)", nullable = false, unique = true)
     private RoleName name;
 
     @Override

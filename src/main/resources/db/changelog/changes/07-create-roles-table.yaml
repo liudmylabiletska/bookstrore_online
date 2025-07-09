@@ -22,7 +22,7 @@ databaseChangeLog:
                     primaryKeyName: pk_roles
               - column:
                   name: role_name
-                  type: ENUM('USER','ADMIN')
+                  type: VARCHAR(50)
                   constraints:
                     nullable: false
                     unique: true
