@@ -5,9 +5,9 @@ databaseChangeLog:
       preConditions:
         onFail: MARK_RAN
         onError: MARK_RAN
-        not:
-          - tableExists:
-              tableName: roles
+        sqlCheck:
+          expectedResult: 0
+          sql: SELECT COUNT(*) FROM roles WHERE role_name in ('USER', 'ADMIN')
       changes:
         - insert:
             tableName: roles

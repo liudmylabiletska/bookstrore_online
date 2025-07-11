@@ -5,9 +5,9 @@ databaseChangeLog:
       preConditions:
         onFail: MARK_RAN
         onError: MARK_RAN
-        not:
-          - tableExists:
-              tableName: shopping_carts
+        sqlCheck:
+          expectedResult: 0
+          sql: SELECT COUNT(*) FROM shopping_carts;
       changes:
         - sql:
             splitStatements: false
