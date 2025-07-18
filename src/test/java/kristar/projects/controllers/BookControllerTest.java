@@ -25,6 +25,7 @@ import kristar.projects.dto.book.BookDto;
 import kristar.projects.dto.book.BookSearchParametersDto;
 import kristar.projects.dto.book.CreateBookRequestDto;
 import kristar.projects.dto.book.UpdateBookRequestDto;
+import kristar.projects.repository.book.BookRepository;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.AfterAll;
@@ -46,6 +47,9 @@ import org.springframework.web.context.WebApplicationContext;
 class BookControllerTest {
 
     protected static MockMvc mockMvc;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -145,11 +149,20 @@ class BookControllerTest {
         EqualsBuilder.reflectionEquals(expected, actual, "id");
     }
 
-    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
+    @WithMockUser(username = "dmytro@example.com", roles = {"USER"})
     @Test
     void getBookById_ValiId_shouldReturnBookDto() throws Exception {
-        Long validBookId = 1L;
-        MvcResult result = mockMvc.perform(get("/books/{id}", validBookId)
+        //        Book book = new Book();
+        //        book.setTitle("Java Essentials");
+        //        book.setAuthor("John Doe");
+        //        book.setIsbn("111-ABC");
+        //        book.setPrice(BigDecimal.valueOf(299.99));
+        //        book.setDescription("Core Java concepts");
+        //        bookRepository.save(book);
+
+        Long bookId = 1L;
+
+        MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -204,17 +217,9 @@ class BookControllerTest {
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
-    @Sql(
-            scripts = "classpath:database/books/add-one-book.sql",
-            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
-    )
-    @Sql(
-            scripts = "classpath:database/books/remove-one-book.sql",
-            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
-    )
     @Test
     void deleteBookById_ValidId_DeleteBook() throws Exception {
-        Long bookId = 4L;
+        Long bookId = 2L;
 
         int statusExpected = 204;
 
@@ -270,6 +275,14 @@ class BookControllerTest {
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
     void updateById_ValidIdUpdateParams_ReturnsUpdatedBook() throws Exception {
+        //        Book book = new Book();
+        //        book.setTitle("Docker for Developers");
+        //        book.setAuthor("Mark Black");
+        //        book.setIsbn("333-GHI");
+        //        book.setPrice(BigDecimal.valueOf(199.50));
+        //        book.setDescription("Practical container usage");
+        //        bookRepository.save(book);
+
         Long bookId = 3L;
 
         UpdateBookRequestDto partialUpdate = new UpdateBookRequestDto();
