@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -54,4 +55,17 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
+
+    public void setCategoryIds(Set<Long> categoryIds) {
+        if (categoryIds != null) {
+            categories = categoryIds.stream()
+                    .map(id -> {
+                        Category category = new Category(id);
+                        return category;
+                    })
+                    .collect(Collectors.toSet());
+        } else {
+            categories = new HashSet<>();
+        }
+    }
 }

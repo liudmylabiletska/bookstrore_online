@@ -8,7 +8,6 @@ import kristar.projects.dto.book.BookDto;
 import kristar.projects.dto.book.BookSearchParametersDto;
 import kristar.projects.dto.book.CreateBookRequestDto;
 import kristar.projects.dto.book.UpdateBookRequestDto;
-import kristar.projects.model.User;
 import kristar.projects.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,8 +41,9 @@ public class BookController {
     @Operation(summary = "Get all books", description = "Get a list of all available books")
     public Page<BookDto> findAll(@ParameterObject Authentication authentication,
                                  @ParameterObject Pageable pageable) {
-        User user = (User) authentication.getPrincipal();
-        return bookService.getAll(user.getEmail(), pageable);
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+
+        return bookService.getAll(user.getUsername(), pageable);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")

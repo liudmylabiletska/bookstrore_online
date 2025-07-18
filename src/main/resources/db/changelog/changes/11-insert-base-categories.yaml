@@ -40,3 +40,9 @@ databaseChangeLog:
               - column: { name: description, value: "Narrative works focused on realistic
                                                       characters, emotional conflict, and dramatic themes" }
               - column: { name: is_deleted, valueNumeric: 0 }
+        - insert:
+              tableName: categories
+              columns:
+                - column: { name: name, value: "Programming" }
+                - column: { name: description, value: "Books dedicated to creating, debugging and optimizing software" }
+                - column: { name: is_deleted, valueNumeric: 0 }

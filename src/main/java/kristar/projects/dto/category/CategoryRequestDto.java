@@ -3,7 +3,9 @@ package kristar.projects.dto.category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
+@Accessors(chain = true)
 @Data
 public class CategoryRequestDto {
     @NotBlank(message = "Name of categoryIds can not be empty")

@@ -1,14 +1,15 @@
 package kristar.projects.dto.book;
 
 import java.math.BigDecimal;
+import org.springframework.lang.Nullable;
 
 public record BookSearchParametersDto(
-        String[] titles,
-        String[] authors,
-        Long[] categoryIds,
-        String[] categoryNames,
-        BigDecimal minPrice,
-        BigDecimal maxPrice
+        @Nullable String[] titles,
+        @Nullable String[] authors,
+        @Nullable Long[] categoryIds,
+        @Nullable String[] categoryNames,
+        @Nullable BigDecimal minPrice,
+        @Nullable BigDecimal maxPrice
 ) {
     public String[] categoryNames() {
         return categoryNames;

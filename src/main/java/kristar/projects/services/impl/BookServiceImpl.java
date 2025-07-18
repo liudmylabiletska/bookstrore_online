@@ -34,13 +34,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<BookDto> getAll(Pageable pageable) {
-        return bookRepository.findAll(pageable)
-                .map(bookMapper::toDto);
-    }
-
-    @Override
-    public Page<BookDto> getAll(String email, Pageable pageable) {
+    public Page<BookDto> getAll(String username, Pageable pageable) {
         return bookRepository.findAll(pageable)
                 .map(bookMapper::toDto);
     }
@@ -56,7 +50,10 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        bookRepository.deleteById(id);
+        Book existingBook = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can not find book with id "
+                        + id + " for deletion"));
+        bookRepository.deleteById(existingBook.getId());
     }
 
     @Override

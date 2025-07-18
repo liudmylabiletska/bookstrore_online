@@ -11,9 +11,11 @@ import kristar.projects.dto.book.UpdateBookRequestDto;
 import kristar.projects.model.Book;
 import kristar.projects.model.Category;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
@@ -25,6 +27,7 @@ public interface BookMapper {
     @Mapping(target = "categories", ignore = true)
     Book toModel(CreateBookRequestDto requestDto);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "categories", ignore = true)
     void updateBookFromDto(@MappingTarget Book book, UpdateBookRequestDto requestDto);
 
