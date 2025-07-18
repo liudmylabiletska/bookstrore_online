@@ -1,10 +1,10 @@
 package kristar.projects.dto.order;
 
 import jakarta.validation.constraints.NotNull;
-import kristar.projects.model.Status;
+import kristar.projects.model.StatusName;
 
 public record UpdateOrderStatusRequestDto(
         @NotNull
-        Status status
+        StatusName status
 ) {
 }

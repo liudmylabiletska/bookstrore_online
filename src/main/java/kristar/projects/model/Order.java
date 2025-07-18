@@ -39,8 +39,8 @@ public class Order {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
+    @Column(name = "status_name", columnDefinition = "varchar(32)", nullable = false)
+    private StatusName status;
 
     @Column(nullable = false)
     private BigDecimal total;

@@ -5,7 +5,7 @@ import kristar.projects.dto.order.CreateOrderRequestDto;
 import kristar.projects.dto.order.OrderDto;
 import kristar.projects.dto.order.OrderItemResponseDto;
 import kristar.projects.dto.order.UpdateOrderStatusRequestDto;
-import kristar.projects.model.Status;
+import kristar.projects.model.StatusName;
 
 public interface OrderService {
     OrderDto save(CreateOrderRequestDto requestDto);
@@ -18,5 +18,5 @@ public interface OrderService {
 
     OrderItemResponseDto findItemByOrderIdItemId(Long orderId, Long itemId);
 
-    List<OrderDto> findAllOrdersByStatus(Status status);
+    List<OrderDto> findAllOrdersByStatus(StatusName status);
 }

@@ -8,7 +8,7 @@ import kristar.projects.dto.order.CreateOrderRequestDto;
 import kristar.projects.dto.order.OrderDto;
 import kristar.projects.dto.order.OrderItemResponseDto;
 import kristar.projects.dto.order.UpdateOrderStatusRequestDto;
-import kristar.projects.model.Status;
+import kristar.projects.model.StatusName;
 import kristar.projects.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -78,7 +78,7 @@ public class OrderController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/status/{status}")
-    public List<OrderDto> getOrdersByStatus(@PathVariable Status status) {
+    public List<OrderDto> getOrdersByStatus(@PathVariable StatusName status) {
 
         return orderService.findAllOrdersByStatus(status);
     }

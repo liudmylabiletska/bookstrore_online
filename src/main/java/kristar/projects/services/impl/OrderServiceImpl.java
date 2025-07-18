@@ -1,5 +1,7 @@
 package kristar.projects.services.impl;
 
+import static kristar.projects.model.StatusName.pending;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -19,7 +21,7 @@ import kristar.projects.model.CartItem;
 import kristar.projects.model.Order;
 import kristar.projects.model.OrderItem;
 import kristar.projects.model.ShoppingCart;
-import kristar.projects.model.Status;
+import kristar.projects.model.StatusName;
 import kristar.projects.model.User;
 import kristar.projects.repository.order.OrderRepository;
 import kristar.projects.repository.orderitem.OrderItemRepository;
@@ -64,6 +66,9 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(calculateTotal(orderItems));
 
         orderRepository.save(order);
+
+        shoppingCart.getCartItems().clear();
+        shoppingCartRepository.save(shoppingCart);
 
         return orderMapper.toOrderDto(order);
     }
@@ -117,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAllOrdersByStatus(Status status) {
+    public List<OrderDto> findAllOrdersByStatus(StatusName status) {
         List<Order> orders = orderRepository.findAllByStatus(status);
         return orders.stream()
                 .map(orderMapper::toUserOrderDto)
@@ -129,7 +134,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setUser(currentUser);
         order.setShippingAddress(shippingAddress);
-        order.setStatus(Status.pending);
+        order.setStatus(pending);
         return order;
     }
 
