@@ -60,11 +60,11 @@ class BookControllerTest {
             @Autowired WebApplicationContext applicationContext
 
     ) throws SQLException {
-        teardown(dataSource);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
+        teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
@@ -149,7 +149,7 @@ class BookControllerTest {
         EqualsBuilder.reflectionEquals(expected, actual, "id");
     }
 
-    @WithMockUser(username = "dmytro@example.com", roles = {"USER"})
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
     void getBookById_ValiId_shouldReturnBookDto() throws Exception {
         //        Book book = new Book();
@@ -241,7 +241,7 @@ class BookControllerTest {
         assertEquals(statusExpectedAfterDeletion, statusActualAfterDeletion);
     }
 
-    @WithMockUser(username = "dmytro@example.com", roles = {"USER"})
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
     void searchBooks_ByTitleKeyword_ReturnsMatches() throws Exception {
         BookSearchParametersDto parametersDto = new BookSearchParametersDto(new String[]{"Docker"},
