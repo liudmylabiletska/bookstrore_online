@@ -33,9 +33,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,21 +58,22 @@ class BookControllerTest {
             @Autowired WebApplicationContext applicationContext
 
     ) throws SQLException {
+        teardown(dataSource);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
-        teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource("database/books/add-three-default-books.sql")
-            );
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource("database/books/add-category-programming-in-books.sql")
-            );
+            //            ScriptUtils.executeSqlScript(
+            //                    connection,
+            //                    new ClassPathResource("database/books/add-three-books.sql")
+            //            );
+            //            ScriptUtils.executeSqlScript(
+            //                    connection,
+            //                    new ClassPathResource("database/books/
+            //                    add-category-programming-in-books.sql")
+            //            );
         }
     }
 
@@ -90,20 +89,28 @@ class BookControllerTest {
     static void teardown(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource("database/books"
-                            + "/remove-category-programming-from-books.sql")
-            );
-            ScriptUtils.executeSqlScript(
-                    connection,
-                    new ClassPathResource("database/books/remove-all-books.sql")
-            );
+            //            ScriptUtils.executeSqlScript(
+            //                    connection,
+            //                    new ClassPathResource("database/books"
+            //                            + "/remove-category-programming-from-books.sql")
+            //            );
+            //            ScriptUtils.executeSqlScript(
+            //                    connection,
+            //                    new ClassPathResource("database/books/remove-all-books.sql")
+            //            );
         }
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
+    @Sql(
+            scripts = "classpath:database/books/add-three-books.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/books/remove-all-books.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
     void getAll_GivenBooksInCatalog_ReturnsAllBooks() throws Exception {
 
         BookDto bookDto1 = new BookDto()
@@ -151,6 +158,14 @@ class BookControllerTest {
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
+    @Sql(
+            scripts = "classpath:database/books/add-three-books.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/books/remove-all-books.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
     void getBookById_ValiId_shouldReturnBookDto() throws Exception {
         //        Book book = new Book();
         //        book.setTitle("Java Essentials");
@@ -159,7 +174,6 @@ class BookControllerTest {
         //        book.setPrice(BigDecimal.valueOf(299.99));
         //        book.setDescription("Core Java concepts");
         //        bookRepository.save(book);
-
         Long bookId = 1L;
 
         MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
@@ -218,6 +232,14 @@ class BookControllerTest {
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
+    @Sql(
+            scripts = "classpath:database/books/add-three-books.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/books/remove-all-books.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
     void deleteBookById_ValidId_DeleteBook() throws Exception {
         Long bookId = 2L;
 
@@ -243,6 +265,14 @@ class BookControllerTest {
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
+    @Sql(
+            scripts = "classpath:database/books/add-three-books.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/books/remove-all-books.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
     void searchBooks_ByTitleKeyword_ReturnsMatches() throws Exception {
         BookSearchParametersDto parametersDto = new BookSearchParametersDto(new String[]{"Docker"},
                 null, null, null, null, null);
@@ -274,6 +304,14 @@ class BookControllerTest {
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
+    @Sql(
+            scripts = "classpath:database/books/add-three-books.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/books/remove-all-books.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
     void updateById_ValidIdUpdateParams_ReturnsUpdatedBook() throws Exception {
         //        Book book = new Book();
         //        book.setTitle("Docker for Developers");
