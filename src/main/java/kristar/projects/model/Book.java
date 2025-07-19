@@ -64,8 +64,6 @@ public class Book {
                         return category;
                     })
                     .collect(Collectors.toSet());
-        } else {
-            categories = new HashSet<>();
         }
     }
 }

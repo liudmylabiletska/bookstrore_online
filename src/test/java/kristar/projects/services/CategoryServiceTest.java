@@ -44,23 +44,23 @@ class CategoryServiceTest {
     @Test
     void findAll_ValidPageable_ReturnsAllCategories() {
         Category category = new Category();
-        Category category1 = new Category();
+        Category categoryA = new Category();
 
         Pageable pageable = PageRequest.of(0, 20);
         CategoryResponseDto categoryDto = new CategoryResponseDto();
-        CategoryResponseDto categoryDto1 = new CategoryResponseDto();
-        List<Category> categoriesList = List.of(category, category1);
+        CategoryResponseDto categoryDtoA = new CategoryResponseDto();
+        List<Category> categoriesList = List.of(category, categoryA);
         Page<Category> categoriesPage = new PageImpl<>(categoriesList);
 
         when(categoryRepository.findAll(pageable)).thenReturn(categoriesPage);
         when(categoryMapper.toDto(category)).thenReturn(categoryDto);
-        when(categoryMapper.toDto(category1)).thenReturn(categoryDto1);
+        when(categoryMapper.toDto(categoryA)).thenReturn(categoryDtoA);
 
         Page<CategoryResponseDto> actual = categoryService.findAll(pageable);
 
         assertEquals(2, actual.getTotalElements());
 
-        verify(categoryRepository, times(1)).findAll(pageable);
+        verify(categoryRepository).findAll(pageable);
         verify(categoryMapper, times(2)).toDto(category);
         verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
@@ -80,7 +80,7 @@ class CategoryServiceTest {
 
         assertEquals(expectedBookDto, actualBookDto);
 
-        verify(categoryRepository, times(1)).findById(id);
+        verify(categoryRepository).findById(id);
         verifyNoMoreInteractions(categoryRepository);
     }
 
@@ -103,9 +103,9 @@ class CategoryServiceTest {
         assertEquals(expectedDto, actualDto);
         assertEquals("Test Category name", actualDto.getName());
 
-        verify(categoryMapper, times(1)).toEntity(requestDto);
-        verify(categoryRepository, times(1)).save(category);
-        verify(categoryMapper, times(1)).toDto(category);
+        verify(categoryMapper).toEntity(requestDto);
+        verify(categoryRepository).save(category);
+        verify(categoryMapper).toDto(category);
 
         verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
@@ -141,10 +141,10 @@ class CategoryServiceTest {
         CategoryResponseDto actualDto = categoryService.update(id, updateRequestDto);
 
         assertEquals("Updated Category Name", actualDto.getName());
-        verify(categoryRepository, times(1)).findById(id);
-        verify(categoryMapper, times(1)).updateCategoryFromDto(existingCategory, updateRequestDto);
-        verify(categoryRepository, times(1)).save(existingCategory);
-        verify(categoryMapper, times(1)).toDto(updatedCategory);
+        verify(categoryRepository).findById(id);
+        verify(categoryMapper).updateCategoryFromDto(existingCategory, updateRequestDto);
+        verify(categoryRepository).save(existingCategory);
+        verify(categoryMapper).toDto(updatedCategory);
     }
 
     @DisplayName("Verify delete() method")
@@ -161,7 +161,7 @@ class CategoryServiceTest {
 
         assertDoesNotThrow(() -> categoryService.deleteById(id));
 
-        verify(categoryRepository, times(1)).findById(id);
-        verify(categoryRepository, times(1)).deleteById(id);
+        verify(categoryRepository).findById(id);
+        verify(categoryRepository).deleteById(id);
     }
 }

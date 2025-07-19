@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -21,6 +20,7 @@ import kristar.projects.dto.book.BookDtoWithoutCategoryIds;
 import kristar.projects.dto.book.BookSearchParametersDto;
 import kristar.projects.dto.book.CreateBookRequestDto;
 import kristar.projects.dto.book.UpdateBookRequestDto;
+import kristar.projects.exception.EntityNotFoundException;
 import kristar.projects.mapper.BookMapper;
 import kristar.projects.model.Book;
 import kristar.projects.repository.book.BookRepository;
@@ -83,9 +83,9 @@ class BookServiceTest {
         assertEquals("11111", actualDto.getIsbn());
         assertEquals(BigDecimal.valueOf(300), actualDto.getPrice());
 
-        verify(bookMapper, times(1)).toModel(requestDto);
-        verify(bookRepository, times(1)).save(book);
-        verify(bookMapper, times(1)).toDto(book);
+        verify(bookMapper).toModel(requestDto);
+        verify(bookRepository).save(book);
+        verify(bookMapper).toDto(book);
 
         verifyNoMoreInteractions(bookRepository, bookMapper);
     }
@@ -99,21 +99,21 @@ class BookServiceTest {
         Pageable pageable = PageRequest.of(0, 20);
         String email = "user@example.com";
         BookDto bookDto = new BookDto();
-        BookDto bookDto1 = new BookDto();
+        BookDto bookDtoA = new BookDto();
         List<Book> booksList = List.of(book, book1);
         Page<Book> booksPage = new PageImpl<>(booksList);
 
         when(bookRepository.findAll(pageable)).thenReturn(booksPage);
         when(bookMapper.toDto(book)).thenReturn(bookDto);
-        when(bookMapper.toDto(book1)).thenReturn(bookDto1);
+        when(bookMapper.toDto(book1)).thenReturn(bookDtoA);
 
         Page<BookDto> actual = bookService.getAll(email, pageable);
 
         assertEquals(2, actual.getTotalElements());
 
-        verify(bookRepository, times(1)).findAll(pageable);
-        verify(bookMapper, times(1)).toDto(book);
-        verify(bookMapper, times(1)).toDto(book1);
+        verify(bookRepository).findAll(pageable);
+        verify(bookMapper).toDto(book);
+        verify(bookMapper).toDto(book1);
         verifyNoMoreInteractions(bookRepository, bookMapper);
     }
 
@@ -128,7 +128,7 @@ class BookServiceTest {
 
         assertTrue(result.isEmpty());
 
-        verify(bookRepository, times(1)).findAll(pageable);
+        verify(bookRepository).findAll(pageable);
         verifyNoMoreInteractions(bookRepository);
     }
 
@@ -147,7 +147,7 @@ class BookServiceTest {
 
         assertEquals(expectedBookDto, actualBookDto);
 
-        verify(bookRepository, times(1)).findById(id);
+        verify(bookRepository).findById(id);
         verifyNoMoreInteractions(bookRepository);
     }
 
@@ -157,14 +157,16 @@ class BookServiceTest {
         Long id = 333L;
         when(bookRepository.findById(id)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(RuntimeException.class, () -> bookService.findById(id));
+        Exception exception = assertThrows(EntityNotFoundException.class,
+                () -> bookService.findById(id)
+        );
 
         String expected = "Can not find book with id " + id;
         String actual = exception.getMessage();
 
         assertEquals(expected, actual);
 
-        verify(bookRepository, times(1)).findById(id);
+        verify(bookRepository).findById(id);
         verifyNoMoreInteractions(bookRepository);
     }
 
@@ -183,30 +185,30 @@ class BookServiceTest {
 
         assertDoesNotThrow(() -> bookService.deleteById(id));
 
-        verify(bookRepository, times(1)).findById(id);
-        verify(bookRepository, times(1)).deleteById(id);
+        verify(bookRepository).findById(id);
+        verify(bookRepository).deleteById(id);
     }
 
     @Test
     @DisplayName("Verify search books within price range")
     public void getBooksInPriceRange_PriceRange_ReturnsFilteredBooks() {
-        Book book1 = new Book();
-        book1.setTitle("Book1");
-        book1.setIsbn("111");
-        book1.setPrice(BigDecimal.valueOf(100));
+        Book bookA = new Book();
+        bookA.setTitle("Book1");
+        bookA.setIsbn("111");
+        bookA.setPrice(BigDecimal.valueOf(100));
 
-        Book book2 = new Book();
-        book2.setTitle("Book2");
-        book2.setIsbn("222");
-        book2.setPrice(BigDecimal.valueOf(300));
+        Book bookB = new Book();
+        bookB.setTitle("Book2");
+        bookB.setIsbn("222");
+        bookB.setPrice(BigDecimal.valueOf(300));
 
         BookDto bookDto1 = new BookDto();
         BookDto bookDto2 = new BookDto();
 
-        bookDto1.setTitle(book1.getTitle());
-        bookDto1.setIsbn(book1.getIsbn());
-        bookDto2.setTitle(book2.getTitle());
-        bookDto2.setIsbn(book2.getIsbn());
+        bookDto1.setTitle(bookA.getTitle());
+        bookDto1.setIsbn(bookA.getIsbn());
+        bookDto2.setTitle(bookB.getTitle());
+        bookDto2.setIsbn(bookB.getIsbn());
 
         BookSearchParametersDto parametersDto = new BookSearchParametersDto(
                 null, null, null, null,
@@ -217,14 +219,14 @@ class BookServiceTest {
         Pageable pageable = PageRequest.of(0, 20);
         Specification<Book> mockspec = mock(Specification.class);
 
-        List<Book> booksList = List.of(book1, book2);
+        List<Book> booksList = List.of(bookA, bookB);
 
         Page<Book> booksPage = new PageImpl<>(booksList);
 
         when(specificationBuilder.build(parametersDto)).thenReturn(mockspec);
         when(bookRepository.findAll(mockspec, pageable)).thenReturn(booksPage);
-        when(bookMapper.toDto(book1)).thenReturn(bookDto1);
-        when(bookMapper.toDto(book2)).thenReturn(bookDto2);
+        when(bookMapper.toDto(bookA)).thenReturn(bookDto1);
+        when(bookMapper.toDto(bookB)).thenReturn(bookDto2);
 
         Page<BookDto> actual = bookService.search(parametersDto, pageable);
 
@@ -232,10 +234,10 @@ class BookServiceTest {
         assertEquals("Book1", actual.getContent().get(0).getTitle());
         assertEquals("Book2", actual.getContent().get(1).getTitle());
 
-        verify(specificationBuilder, times(1)).build(parametersDto);
-        verify(bookRepository, times(1)).findAll(mockspec, pageable);
-        verify(bookMapper, times(1)).toDto(book1);
-        verify(bookMapper, times(1)).toDto(book2);
+        verify(specificationBuilder).build(parametersDto);
+        verify(bookRepository).findAll(mockspec, pageable);
+        verify(bookMapper).toDto(bookA);
+        verify(bookMapper).toDto(bookB);
     }
 
     @Test
@@ -269,10 +271,10 @@ class BookServiceTest {
         BookDto actualDto = bookService.updateById(id, updateRequestDto);
 
         assertEquals("Updated Title", actualDto.getTitle());
-        verify(bookRepository, times(1)).findById(id);
-        verify(bookMapper, times(1)).updateBookFromDto(existingBook, updateRequestDto);
-        verify(bookRepository, times(1)).save(existingBook);
-        verify(bookMapper, times(1)).toDto(updatedBook);
+        verify(bookRepository).findById(id);
+        verify(bookMapper).updateBookFromDto(existingBook, updateRequestDto);
+        verify(bookRepository).save(existingBook);
+        verify(bookMapper).toDto(updatedBook);
     }
 
     @Test
@@ -297,7 +299,7 @@ class BookServiceTest {
         assertEquals(1, actual.getTotalElements());
         assertEquals("Found book with param categoryId", actual.getContent().get(0).getTitle());
 
-        verify(bookRepository, times(1)).findAllByCategoryId(categoryId, pageable);
-        verify(bookMapper, times(1)).toDtoWithoutCategories(book);
+        verify(bookRepository).findAllByCategoryId(categoryId, pageable);
+        verify(bookMapper).toDtoWithoutCategories(book);
     }
 }

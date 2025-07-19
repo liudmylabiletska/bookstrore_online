@@ -1,7 +1,9 @@
 package kristar.projects.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,6 +35,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -95,31 +98,34 @@ class BookControllerTest {
     )
     void getAll_GivenBooksInCatalog_ReturnsAllBooks() throws Exception {
 
-        BookDto bookDto1 = new BookDto()
+        BookDto bookDtoFirst = new BookDto()
                 .setTitle("Java Essentials")
                 .setAuthor("John Doe")
                 .setIsbn("111-ABC")
                 .setPrice(BigDecimal.valueOf(299.99))
-                .setDescription("Core Java concepts");
+                .setDescription("Core Java concepts")
+                .setCategoryIds(Set.of());
 
-        BookDto bookDto2 = new BookDto()
+        BookDto bookDtoSecond = new BookDto()
                 .setTitle("Spring Boot Starter")
                 .setAuthor("Jane Smith")
                 .setIsbn("222-DEF")
                 .setPrice(BigDecimal.valueOf(399.00))
-                .setDescription("Build REST APIs with Spring Boot");
+                .setDescription("Build REST APIs with Spring Boot")
+                .setCategoryIds(Set.of());
 
-        BookDto bookDto3 = new BookDto()
+        BookDto bookDtoThird = new BookDto()
                 .setTitle("Docker for Developers")
                 .setAuthor("Mark Black")
                 .setIsbn("333-GHI")
                 .setPrice(BigDecimal.valueOf(199.50))
-                .setDescription("Practical container usage");
+                .setDescription("Practical container usage")
+                .setCategoryIds(Set.of());
 
         List<BookDto> expected = new ArrayList<>();
-        expected.add(bookDto1);
-        expected.add(bookDto2);
-        expected.add(bookDto3);
+        expected.add(bookDtoFirst);
+        expected.add(bookDtoSecond);
+        expected.add(bookDtoThird);
 
         MvcResult result = mockMvc.perform(get("/books")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -134,8 +140,10 @@ class BookControllerTest {
         List<BookDto> actual = Arrays.stream(actualArray).toList();
 
         assertEquals(3, actual.size());
-
-        EqualsBuilder.reflectionEquals(expected, actual, "id");
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "coverImage", "categoryIds", "description")
+                .isEqualTo(expected);
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -162,6 +170,31 @@ class BookControllerTest {
         assertEquals("Java Essentials", actual.getTitle());
         assertEquals("John Doe", actual.getAuthor());
 
+    }
+
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
+    @Test
+    @Sql(
+            scripts = "classpath:database/books/add-three-books.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/books/remove-all-books.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
+    void getBookById_InValiId_shouldReturnBookDto() throws Exception {
+        Long bookId = 333L;
+
+        MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        int statusExpected = HttpStatus.NOT_FOUND.value();
+
+        int statusActual = result.getResponse().getStatus();
+
+        assertEquals(statusExpected, statusActual);
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -202,7 +235,36 @@ class BookControllerTest {
 
         assertNotNull(actualDto);
 
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto, "id");
+        assertTrue(EqualsBuilder.reflectionEquals(expectedDto, actualDto, "id"));
+    }
+
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
+    @Test
+    @Sql(
+            scripts = "classpath:database/books/remove-test-title-book.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
+    void createBook_InvalidRequestDto_ShouldReturnBadRequest() throws Exception {
+        CreateBookRequestDto invalidDto = new CreateBookRequestDto()
+                .setTitle("Test Title")
+                .setAuthor("")
+                .setIsbn("111")
+                .setPrice(BigDecimal.valueOf(-10))
+                .setDescription("desc")
+                .setCategoryIds(Set.of());
+
+        String jsonRequest = objectMapper.writeValueAsString(invalidDto);
+
+        MvcResult result = mockMvc.perform(post("/books")
+                        .content(jsonRequest)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        int expectedStatus = HttpStatus.BAD_REQUEST.value();
+        int actualStatus = result.getResponse().getStatus();
+
+        assertEquals(expectedStatus, actualStatus);
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -273,8 +335,11 @@ class BookControllerTest {
 
         assertNotNull(actualDto);
 
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto, "id, categoryIds,"
-                + " coverImage, description");
+        assertThat(actualDto)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "coverImage", "categoryIds", "description")
+                .isEqualTo(expectedDto);
+
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -290,16 +355,21 @@ class BookControllerTest {
     void updateById_ValidIdUpdateParams_ReturnsUpdatedBook() throws Exception {
         Long bookId = 3L;
 
-        UpdateBookRequestDto partialUpdate = new UpdateBookRequestDto();
-        partialUpdate.setPrice(BigDecimal.valueOf(230.99));
-        partialUpdate.setDescription("Updated description only");
+        UpdateBookRequestDto partialUpdate = new UpdateBookRequestDto()
+                .setTitle("Docker for Developers")
+                .setAuthor("Mark Black")
+                .setIsbn("333-GHI")
+                .setPrice(BigDecimal.valueOf(230.99))
+                .setDescription("Updated description only")
+                .setCategoryIds(Set.of(7L));
 
         BookDto expectedDto = new BookDto()
                 .setTitle("Docker for Developers")
                 .setAuthor("Mark Black")
                 .setIsbn("333-GHI")
                 .setPrice(partialUpdate.getPrice())
-                .setDescription(partialUpdate.getDescription());
+                .setDescription(partialUpdate.getDescription())
+                .setCategoryIds(partialUpdate.getCategoryIds());
 
         String jsonRequest = objectMapper.writeValueAsString(partialUpdate);
 
@@ -318,7 +388,40 @@ class BookControllerTest {
 
         assertEquals(BigDecimal.valueOf(230.99), actualDto.getPrice());
         assertEquals("Updated description only", actualDto.getDescription());
+        assertThat(actualDto)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "coverImage", "categoryIds", "description")
+                .isEqualTo(expectedDto);
+    }
 
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto, "id, categoryIds, coverImage");
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
+    @Test
+    @Sql(
+            scripts = "classpath:database/books/add-three-books.sql",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+    )
+    @Sql(
+            scripts = "classpath:database/books/remove-all-books.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
+    )
+    void updateById_InvalidPayload_ShouldReturnBadRequest() throws Exception {
+        Long bookId = 3L;
+
+        UpdateBookRequestDto invalidUpdate = new UpdateBookRequestDto();
+        invalidUpdate.setPrice(BigDecimal.valueOf(-100));
+        invalidUpdate.setDescription("desc");
+
+        String jsonRequest = objectMapper.writeValueAsString(invalidUpdate);
+
+        MvcResult result = mockMvc.perform(patch("/books/{id}", bookId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        int expectedStatus = HttpStatus.BAD_REQUEST.value();
+        int actualStatus = result.getResponse().getStatus();
+
+        assertEquals(expectedStatus, actualStatus);
     }
 }

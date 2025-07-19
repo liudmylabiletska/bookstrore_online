@@ -1,7 +1,9 @@
 package kristar.projects.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
-import kristar.projects.dto.book.BookDto;
 import kristar.projects.dto.book.BookDtoWithoutCategoryIds;
 import kristar.projects.dto.category.CategoryRequestDto;
 import kristar.projects.dto.category.CategoryResponseDto;
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -130,12 +132,43 @@ class CategoryControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        BookDto actualDto = objectMapper.readValue(result.getResponse()
-                .getContentAsString(), BookDto.class);
+        CategoryResponseDto actualDto = objectMapper.readValue(result.getResponse()
+                .getContentAsString(), CategoryResponseDto.class);
 
         assertNotNull(actualDto);
 
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto, "id");
+        assertThat(actualDto)
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(expectedDto);
+    }
+
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
+    @Test
+    @Sql(scripts = "classpath:database/categories/remove-test-title-category.sql",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void createCategory_InValidRequestDto_ShouldReturnBadRequest() throws Exception {
+        CategoryRequestDto requestDto = new CategoryRequestDto()
+                .setName("     ")
+                .setDescription("Description");
+
+        CategoryResponseDto expectedDto = new CategoryResponseDto()
+                .setName(requestDto.getName())
+                .setDescription(requestDto.getDescription());
+
+        String json = objectMapper.writeValueAsString(requestDto);
+
+        MvcResult result = mockMvc.perform(post("/categories")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        int expectedStatus = HttpStatus.BAD_REQUEST.value();
+        int actualStatus = result.getResponse().getStatus();
+
+        assertEquals(expectedStatus, actualStatus);
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -158,7 +191,8 @@ class CategoryControllerTest {
                 .setDescription("Guides for personal growth and motivation");
         CategoryResponseDto categoryDto6 = new CategoryResponseDto()
                 .setName("Drama")
-                .setDescription("Narrative works focused on realistic");
+                .setDescription("Narrative works focused on realistic characters,"
+                        + " emotional conflict, and dramatic themes");
         CategoryResponseDto categoryDto7 = new CategoryResponseDto()
                 .setName("Programming")
                 .setDescription("Books dedicated to creating, debugging and optimizing software");
@@ -194,13 +228,19 @@ class CategoryControllerTest {
         JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
         JsonNode contentNode = root.get("content");
 
-        BookDto[] actualArray = objectMapper.treeToValue(contentNode, BookDto[].class);
+        CategoryResponseDto[] actualArray = objectMapper.treeToValue(
+                contentNode,
+                CategoryResponseDto[].class
+        );
 
-        List<BookDto> actual = Arrays.stream(actualArray).toList();
+        List<CategoryResponseDto> actual = Arrays.stream(actualArray).toList();
 
         assertEquals(10, actual.size());
 
-        EqualsBuilder.reflectionEquals(expected, actual, "id");
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(expected);
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -219,6 +259,23 @@ class CategoryControllerTest {
         );
 
         assertEquals("Programming", actual.getName());
+    }
+
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
+    @Test
+    void getCategoryById_InValiId_shouldReturnCategoryDto() throws Exception {
+        Long categoryId = 333L;
+
+        MvcResult result = mockMvc.perform(get("/categories/{id}", categoryId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        int statusExpected = HttpStatus.NOT_FOUND.value();
+
+        int statusActual = result.getResponse().getStatus();
+
+        assertEquals(statusExpected, statusActual);
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -252,7 +309,7 @@ class CategoryControllerTest {
         assertEquals("Updated Name", actualDto.getName());
         assertEquals("Updated description only", actualDto.getDescription());
 
-        EqualsBuilder.reflectionEquals(expectedDto, actualDto, "id");
+        assertTrue(EqualsBuilder.reflectionEquals(expectedDto, actualDto, "id"));
     }
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
@@ -290,7 +347,7 @@ class CategoryControllerTest {
 
     @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
     @Test
-    void getBooksByCategoryId_BooksValidCategoryId_ReturnsListBooks() throws Exception {
+    void getBooksByCategoryId_ValidCategoryId_ReturnsListBooks() throws Exception {
 
         BookDtoWithoutCategoryIds book1 = new BookDtoWithoutCategoryIds();
         book1.setTitle("Java Essentials");
@@ -331,6 +388,34 @@ class CategoryControllerTest {
         List<BookDtoWithoutCategoryIds> booksActual = rawList.stream()
                 .map(obj -> objectMapper.convertValue(obj, BookDtoWithoutCategoryIds.class))
                 .toList();
+
+        booksActual.forEach(book -> book.setId(null));
+
+        assertEquals(booksExpected.size(), booksActual.size());
+        assertEquals(booksExpected, booksActual);
+    }
+
+    @WithMockUser(username = "dmytro@example.com", roles = {"ADMIN"})
+    @Test
+    void getBooksByCategoryId_InValidCategoryId_ReturnsListBooks() throws Exception {
+        Long categoryId = 1L;
+
+        MvcResult result = mockMvc.perform(get("/categories/{id}/books", categoryId)
+                        .param("page", "0")
+                        .param("size", "20")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andReturn();
+
+        String responseJson = result.getResponse().getContentAsString();
+        List<Map<String, Object>> rawList = JsonPath.read(responseJson, "$.content");
+
+        List<BookDtoWithoutCategoryIds> booksActual = rawList.stream()
+                .map(obj -> objectMapper.convertValue(obj, BookDtoWithoutCategoryIds.class))
+                .toList();
+
+        List<BookDtoWithoutCategoryIds> booksExpected = List.of();
 
         booksActual.forEach(book -> book.setId(null));
 
