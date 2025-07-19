@@ -65,15 +65,6 @@ class BookControllerTest {
                 .build();
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            //            ScriptUtils.executeSqlScript(
-            //                    connection,
-            //                    new ClassPathResource("database/books/add-three-books.sql")
-            //            );
-            //            ScriptUtils.executeSqlScript(
-            //                    connection,
-            //                    new ClassPathResource("database/books/
-            //                    add-category-programming-in-books.sql")
-            //            );
         }
     }
 
@@ -89,15 +80,6 @@ class BookControllerTest {
     static void teardown(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
-            //            ScriptUtils.executeSqlScript(
-            //                    connection,
-            //                    new ClassPathResource("database/books"
-            //                            + "/remove-category-programming-from-books.sql")
-            //            );
-            //            ScriptUtils.executeSqlScript(
-            //                    connection,
-            //                    new ClassPathResource("database/books/remove-all-books.sql")
-            //            );
         }
     }
 
@@ -167,13 +149,6 @@ class BookControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void getBookById_ValiId_shouldReturnBookDto() throws Exception {
-        //        Book book = new Book();
-        //        book.setTitle("Java Essentials");
-        //        book.setAuthor("John Doe");
-        //        book.setIsbn("111-ABC");
-        //        book.setPrice(BigDecimal.valueOf(299.99));
-        //        book.setDescription("Core Java concepts");
-        //        bookRepository.save(book);
         Long bookId = 1L;
 
         MvcResult result = mockMvc.perform(get("/books/{id}", bookId)
@@ -313,14 +288,6 @@ class BookControllerTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void updateById_ValidIdUpdateParams_ReturnsUpdatedBook() throws Exception {
-        //        Book book = new Book();
-        //        book.setTitle("Docker for Developers");
-        //        book.setAuthor("Mark Black");
-        //        book.setIsbn("333-GHI");
-        //        book.setPrice(BigDecimal.valueOf(199.50));
-        //        book.setDescription("Practical container usage");
-        //        bookRepository.save(book);
-
         Long bookId = 3L;
 
         UpdateBookRequestDto partialUpdate = new UpdateBookRequestDto();
