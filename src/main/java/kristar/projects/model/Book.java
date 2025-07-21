@@ -59,10 +59,7 @@ public class Book {
     public void setCategoryIds(Set<Long> categoryIds) {
         if (categoryIds != null) {
             categories = categoryIds.stream()
-                    .map(id -> {
-                        Category category = new Category(id);
-                        return category;
-                    })
+                    .map(Category::new)
                     .collect(Collectors.toSet());
         }
     }

@@ -79,7 +79,6 @@ class BookControllerTest {
         teardown(dataSource);
     }
 
-    @SneakyThrows
     static void teardown(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);

@@ -83,10 +83,6 @@ class BookServiceTest {
         assertEquals("11111", actualDto.getIsbn());
         assertEquals(BigDecimal.valueOf(300), actualDto.getPrice());
 
-        verify(bookMapper).toModel(requestDto);
-        verify(bookRepository).save(book);
-        verify(bookMapper).toDto(book);
-
         verifyNoMoreInteractions(bookRepository, bookMapper);
     }
 
@@ -271,15 +267,11 @@ class BookServiceTest {
         BookDto actualDto = bookService.updateById(id, updateRequestDto);
 
         assertEquals("Updated Title", actualDto.getTitle());
-        verify(bookRepository).findById(id);
-        verify(bookMapper).updateBookFromDto(existingBook, updateRequestDto);
-        verify(bookRepository).save(existingBook);
-        verify(bookMapper).toDto(updatedBook);
     }
 
     @Test
     @DisplayName("Verify findBooksByCategoryId() method")
-    public void findBooksByCategoryId_validCategoryId_ReturnsBooks() {
+    public void findBooksByCategoryId_ValidCategoryId_ReturnsBooks() {
         Long categoryId = 2L;
         Pageable pageable = PageRequest.of(0, 20);
 

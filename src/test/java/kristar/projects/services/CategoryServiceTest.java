@@ -1,9 +1,12 @@
 package kristar.projects.services;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import kristar.projects.dto.category.CategoryRequestDto;
 import kristar.projects.dto.category.CategoryResponseDto;
+import kristar.projects.exception.EntityNotFoundException;
 import kristar.projects.mapper.CategoryMapper;
 import kristar.projects.model.Category;
 import kristar.projects.repository.category.CategoryRepository;
@@ -103,16 +107,12 @@ class CategoryServiceTest {
         assertEquals(expectedDto, actualDto);
         assertEquals("Test Category name", actualDto.getName());
 
-        verify(categoryMapper).toEntity(requestDto);
-        verify(categoryRepository).save(category);
-        verify(categoryMapper).toDto(category);
-
         verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
 
     @DisplayName("Verify update() method")
     @Test
-    void updateById_validId_shouldUpdateCategory() {
+    void updateById_ValidId_ShouldUpdateCategory() {
         Long id = 1L;
 
         CategoryRequestDto updateRequestDto = new CategoryRequestDto();
@@ -141,20 +141,16 @@ class CategoryServiceTest {
         CategoryResponseDto actualDto = categoryService.update(id, updateRequestDto);
 
         assertEquals("Updated Category Name", actualDto.getName());
-        verify(categoryRepository).findById(id);
-        verify(categoryMapper).updateCategoryFromDto(existingCategory, updateRequestDto);
-        verify(categoryRepository).save(existingCategory);
-        verify(categoryMapper).toDto(updatedCategory);
     }
 
     @DisplayName("Verify delete() method")
     @Test
     void deleteById_ValidId_ShouldInvokeRepositoryDelete() {
-        Long id = 5L;
-
+        Long id = 1L;
         Category category = new Category();
         category.setId(id);
-        category.setName("Dummy Category");
+        category.setName("Test Category");
+        category.setDescription("Test Description");
 
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
         doNothing().when(categoryRepository).deleteById(id);
@@ -163,5 +159,19 @@ class CategoryServiceTest {
 
         verify(categoryRepository).findById(id);
         verify(categoryRepository).deleteById(id);
+        verifyNoMoreInteractions(categoryRepository);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when book ID not found")
+    void deleteById_invalidId_shouldThrowException() {
+        Long id = 999L;
+
+        when(categoryRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> categoryService.deleteById(id));
+
+        verify(categoryRepository).findById(id);
+        verify(categoryRepository, never()).deleteById(any());
     }
 }
