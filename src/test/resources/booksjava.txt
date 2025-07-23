@@ -1,0 +1,8 @@
+INSERT INTO books (title, author, isbn, price, description, is_deleted)
+VALUES
+  ('Java Essentials', 'John Doe', '111-ABC', 299.99, 'Core Java concepts', 0),
+  ('Spring Boot Starter', 'Jane Smith', '222-DEF', 399.00, 'Build REST APIs with Spring Boot', 0),
+  ('Docker for Developers', 'Mark Black', '333-GHI', 199.50, 'Practical container usage', 0),
+  ('Effective Java', 'Joshua Bloch', '444-JAVA', 349.00, 'Best practices and idioms for Java programming', 0),
+  ('Java Concurrency in Practice', 'Brian Goetz', '555-JAVA', 379.00, 'Advanced multithreading and synchronization techniques', 0),
+  ('Clean Code in Java', 'Robert C. Martin', '666-JAVA', 319.99, 'Writing maintainable and readable Java code', 0);

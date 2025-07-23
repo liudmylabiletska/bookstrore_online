@@ -9,7 +9,9 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
+@Accessors(chain = true)
 @Data
 public class UpdateBookRequestDto {
     @NotBlank(message = "Title cannot be blank")

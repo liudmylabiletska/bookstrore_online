@@ -54,6 +54,9 @@ public class CategoryServiceImpl implements kristar.projects.services.CategorySe
 
     @Override
     public void deleteById(Long id) {
-        categoryRepository.deleteById(id);
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cannot find"
+                        + " category with id " + id));
+        categoryRepository.deleteById(category.getId());
     }
 }
