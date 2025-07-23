@@ -4,8 +4,6 @@ A secure and extensible backend system for managing books, categories, users, an
 
 ---
 
-## 🇺🇸 English Version
-
 ### 🚀 Motivation
 
 This project showcases my backend engineering skills using Spring Boot and clean architecture. It addresses common tasks in e-commerce systems like authentication, data filtering, validation, and role-based operations.
