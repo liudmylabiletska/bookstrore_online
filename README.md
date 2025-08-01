@@ -1,4 +1,5 @@
 # 📚 Online Book Store API
+
 A secure and extensible backend system for managing books, categories, users, and orders.  
 This API handles registration, JWT authentication, partial book updates via PATCH, role-based access control, and integration testing.
 It supports soft deletion using Hibernate annotations and uses Swagger for dynamic documentation.  
@@ -12,45 +13,105 @@ It addresses common tasks in e-commerce systems like authentication, data filter
 
 ### Main project structure
 
+# Online Book Store 
+
+```
 online-book-store/
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── mate/academy/
-│   │   │       ├── controller/     # REST controllers
-│   │   │       ├── dto/            # Data Transfer Objects
-│   │   │       ├── model/          # JPA entity
-│   │   │       ├── repository/     # Spring Data repositories
-│   │   │       ├── service/        # Business Logic
-│   │   │       └── config/         # Configuration
+│   │   │       ├── controller/                # REST controllers
+│   │   │       ├── dto/                       # Data Transfer Objects  
+│   │   │       ├── model/                     # JPA entity
+│   │   │       ├── repository/                # Spring Data repositories
+│   │   │       ├── service/                   # Business Logic
+│   │   │       └── config/                    # Configuration
 │   │   └── resources/
-│   │       ├── db/changelog/              # Liquibase
-│   │       └── application.properties     # Конфігурація Spring
-│   └── test/                              # Tests
-├── docker-compose.yml                     # Docker конфігурація
-├── .env.template                          # Template of environment variables
-├── .env                           # .env configuration (non Git)
-└── pom.xml                        # Maven configuration
+│   │       ├── db/changelog/                  # Liquibase migrations
+│   │       └── application.properties         # Конфігурація Spring
+│   └── test/                                  # Tests
+├── docker-compose.yml                         # Docker конфігурація  
+├── .env.template                              # Template of environment variables
+├── .env                                       # .env configuration (не в Git)
+└── pom.xml                                    # Maven configuration
+```
 
+## Structure Description:
 
-###  Model Diagram
-[model_diagram.png](model_diagram.png)
+### Main Java packages:
+- **controller/** - REST controllers for handling HTTP requests
+- **dto/** - Data Transfer Objects for API
+- **model/** - JPA entities for database operations
+- **repository/** - Spring Data JPA repositories
+- **service/** - Business logic layer
+- **config/** - Spring configuration classes
+
+### Resources:
+- **db/changelog/** - Database migrations via Liquibase
+- **application.properties** - Main Spring Boot configuration
+
+### Configuration files:
+- **docker-compose.yml** - Docker containers setup
+- **.env.template** - Environment variables template
+- **.env** - Environment variables (not tracked by Git)
+- **pom.xml** - Maven dependencies and configuration
+
+## Model Diagram
+
+![Model Diagram](model_diagram.png)
+
+This diagram shows the relationships between entities like `User`, `Book`, `Order`, `ShoppingCart`, etc.  
+It supports understanding of the domain structure for contributors and reviewers.
 This diagram shows the relationships between entities like `User`, `Book`, `Order`, `ShoppingCart`, etc.  
 It supports understanding of the domain structure for contributors and reviewers.
 Here's the diagram of all models with correct relationships:
 
-**Main Relationships:**
+### Online Book Store - Database Relationships
 
-User ↔ Role - Many-to-Many (through users_roles table)
-User ↔ ShoppingCart - One-to-One (each user has one cart)
-User ↔ Order - One-to-Many (user can have many orders)
-ShoppingCart ↔ CartItem - One-to-Many (cart contains many items)
-Book ↔ Category - Many-to-Many (through books_categories table)
-CartItem ↔ Book - Many-to-One (cart item references a book)
-Order ↔ OrderItem - One-to-Many (order contains many items)
-OrderItem ↔ Book - Many-to-One (order item references a book)
+### Entity Relationship Diagram (ERD)
 
-**Key Features:**
+#### User Relations:
+- **User ↔ Role**
+  - **Many-to-Many** (through `users_roles` table)
+  - One user can have multiple roles, one role can be assigned to multiple users
+
+- **User ↔ ShoppingCart**
+  - **One-to-One** (each user has one cart)
+  - Each user has exactly one shopping cart
+
+- **User ↔ Order**
+  - **One-to-Many** (user can have many orders)
+  - One user can place multiple orders over time
+
+#### Shopping Cart Relations:
+- **ShoppingCart ↔ CartItem**
+  - **One-to-Many** (cart contains many items)
+  - One shopping cart can contain multiple cart items
+
+#### Book Relations:
+- **Book ↔ Category**
+  - **Many-to-Many** (through `books_categories` table)
+  - One book can belong to multiple categories, one category can contain multiple books
+
+- **CartItem ↔ Book**
+  - **Many-to-One** (cart item references a book)
+  - Multiple cart items can reference the same book
+
+### Order Relations:
+- **Order ↔ OrderItem**
+  - **One-to-Many** (order contains many items)
+  - One order can contain multiple order items
+
+- **OrderItem ↔ Book**
+  - **Many-to-One** (order item references a book)
+  - Multiple order items can reference the same book
+
+### Summary of Junction Tables:
+- `users_roles` - Links users with their roles
+- `books_categories` - Links books with their categories
+
+### **Key Features:**
 
 All entities have soft delete through isDeleted field
 ShoppingCart uses @MapsId for relationship with User
@@ -89,26 +150,32 @@ RoleName - enum for user roles
 
 ## 🗂 API Documentation
 
-**Use for connection Swagger/Postman**
+### **Use for connection Swagger/Postman**
 
 http://localhost:8081/api/auth/login:
+
 "email": "dmytro@example.com",
+
 "password": "12345678910"
 
 Result: "token": "<your-jwt-token>"
 
-AUTHORIZATION: Bearer <your-jwt-token>
+Params:
+KEY: AUTHORIZATION ||
+VALUE: Bearer <your-jwt-token>
+
+
 
 - **Swagger UI**: [http://localhost:8081/api/swagger-ui/index.html](http://localhost:8081/api/swagger-ui/index.html#)
 
 - **Postman Collection** http://localhost:8081/api/auth/login
 
-  Authentication
+###   Authentication
 
 ✅ User Registration
 ✅ User Login (з JWT token)
 
-Books Management
+### Books Management
 
 ✅ Get All Books (with pagination)
 ✅ Get Book by ID
@@ -117,19 +184,19 @@ Books Management
 ✅ Delete Book (Admin)
 ✅ Search Books (with filters)
 
-Categories Management
+### Categories Management
 
 ✅ CRUD операції для категорій
 ✅ Get Books by Category
 
-Shopping Cart
+### Shopping Cart
 
 ✅ Get Cart
 ✅ Add Book to Cart
 ✅ Update Item Quantity
 ✅ Remove Item from Cart
 
-Orders Management
+### Orders Management
 
 ✅ Create Order
 ✅ Get User Orders
@@ -139,49 +206,65 @@ Orders Management
 
 ### 📥 How to Run Locally
 
-**_Step 1: Clone the Repository_**:
+#### **_Step 1: Clone the Repository_**:
 
 https://github.com/kostya-savchenko/online-book-store
 
 bash# git clone <repository-url>
+
 cd online-book-store
 
-**_Step 2: Set Up Environment Variables_**:
+#### **_Step 2: Set Up Environment Variables_**:
+
 bash# Copy the environment template
 cp .env.template .env
 
-**_Step 3: Configure Your .env File_**:
+#### **_Step 3: Configure Your .env File_**:
+
 Open the .env file and fill in the following variables:
 
-# Database Configuration:
+#### - Database Configuration:
 
 MYSQLDB_USER=root
-MYSQLDB_ROOT_PASSWORD=YourSecurePassword123
+
+MYSQLDB_ROOT_PASSWORD=your_secure_password
+
 MYSQLDB_DATABASE=book_store
+
 MYSQLDB_LOCAL_PORT=3307
+
 MYSQLDB_DOCKER_PORT=3306
 
-# Spring Boot Configuration
+
+#### - Spring Boot Configuration
 SPRING_LOCAL_PORT=8081
+
 SPRING_DOCKER_PORT=8080
+
 DEBUG_PORT=5005
-⚠️ Important:
+
+#### ⚠️ Important:
 Change MYSQLDB_ROOT_PASSWORD to your own secure password
 Make sure ports don't conflict with other services
 
-**_Step 4: Maven repackage_**:
+#### **_Step 4: Maven repackage_**:
+
 bash# Repackage the project with command: mvn clean package
 
-**_Step 5: Run with Docker_**:
+#### **_Step 5: Run with Docker_**:
+
 bash# Start all services
 docker-compose up --build
 
-# Or run in background
+#### Or run in background
 docker-compose up --build -d
 
-**_Step 6: Verify the Setup_**:
+#### **_Step 6: Verify the Setup_**:
+
 After successful startup, services will be available at:
 
 API: http://localhost:8081
+
 Swagger UI: http://localhost:8081/api/swagger-ui.html
+
 MySQL: localhost:3307
