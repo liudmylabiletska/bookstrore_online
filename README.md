@@ -29,9 +29,9 @@ online-book-store/
 │   │   │       └── config/                    # Configuration
 │   │   └── resources/
 │   │       ├── db/changelog/                  # Liquibase migrations
-│   │       └── application.properties         # Конфігурація Spring
+│   │       └── application.properties         # Configuration Spring
 │   └── test/                                  # Tests
-├── docker-compose.yml                         # Docker конфігурація  
+├── docker-compose.yml                         # Docker Confuguration  
 ├── .env.template                              # Template of environment variables
 ├── .env                                       # .env configuration (не в Git)
 └── pom.xml                                    # Maven configuration
