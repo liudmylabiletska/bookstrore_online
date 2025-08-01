@@ -99,7 +99,7 @@ Result: "token": "<your-jwt-token>"
 
 AUTHORIZATION: Bearer <your-jwt-token>
 
-- **Swagger UI**: [http://localhost:8081/swagger-ui/index.html](http://localhost:8081/api/swagger-ui/index.html#)
+- **Swagger UI**: [http://localhost:8081/api/swagger-ui/index.html](http://localhost:8081/api/swagger-ui/index.html#)
 
 - **Postman Collection** http://localhost:8081/api/auth/login
 
@@ -140,6 +140,7 @@ Orders Management
 ### 📥 How to Run Locally
 
 **_Step 1: Clone the Repository_**:
+
 https://github.com/kostya-savchenko/online-book-store
 
 bash# git clone <repository-url>
@@ -152,7 +153,8 @@ cp .env.template .env
 **_Step 3: Configure Your .env File_**:
 Open the .env file and fill in the following variables:
 
-bash# Database Configuration
+# Database Configuration:
+
 MYSQLDB_USER=root
 MYSQLDB_ROOT_PASSWORD=YourSecurePassword123
 MYSQLDB_DATABASE=book_store
@@ -181,5 +183,5 @@ docker-compose up --build -d
 After successful startup, services will be available at:
 
 API: http://localhost:8081
-Swagger UI: http://localhost:8081/swagger-ui.html
+Swagger UI: http://localhost:8081/api/swagger-ui.html
 MySQL: localhost:3307
