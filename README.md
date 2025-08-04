@@ -6,14 +6,14 @@ It supports soft deletion using Hibernate annotations and uses Swagger for dynam
 The project is containerized with Docker, version-controlled via Liquibase, and designed to scale in production-ready environments.
 ---
 
-### 🚀 Motivation
+## 🚀 Motivation
 
 This project showcases my backend engineering skills using Spring Boot and clean architecture.
 It addresses common tasks in e-commerce systems like authentication, data filtering, validation, and role-based operations.
 
-### Main project structure
+## Main project structure
 
-# Online Book Store 
+### Online Book Store 
 
 ```
 online-book-store/
@@ -37,9 +37,9 @@ online-book-store/
 └── pom.xml                                    # Maven configuration
 ```
 
-## Structure Description:
+### Structure Description:
 
-### Main Java packages:
+#### Main Java packages:
 - **controller/** - REST controllers for handling HTTP requests
 - **dto/** - Data Transfer Objects for API
 - **model/** - JPA entities for database operations
@@ -47,11 +47,11 @@ online-book-store/
 - **service/** - Business logic layer
 - **config/** - Spring configuration classes
 
-### Resources:
+#### Resources:
 - **db/changelog/** - Database migrations via Liquibase
 - **application.properties** - Main Spring Boot configuration
 
-### Configuration files:
+#### Configuration files:
 - **docker-compose.yml** - Docker containers setup
 - **.env.template** - Environment variables template
 - **.env** - Environment variables (not tracked by Git)
@@ -67,9 +67,7 @@ This diagram shows the relationships between entities like `User`, `Book`, `Orde
 It supports understanding of the domain structure for contributors and reviewers.
 Here's the diagram of all models with correct relationships:
 
-### Online Book Store - Database Relationships
-
-### Entity Relationship Diagram (ERD)
+### Entity Relationship
 
 #### User Relations:
 - **User ↔ Role**
@@ -98,7 +96,7 @@ Here's the diagram of all models with correct relationships:
   - **Many-to-One** (cart item references a book)
   - Multiple cart items can reference the same book
 
-### Order Relations:
+#### Order Relations:
 - **Order ↔ OrderItem**
   - **One-to-Many** (order contains many items)
   - One order can contain multiple order items
@@ -107,7 +105,7 @@ Here's the diagram of all models with correct relationships:
   - **Many-to-One** (order item references a book)
   - Multiple order items can reference the same book
 
-### Summary of Junction Tables:
+#### Summary of Junction Tables:
 - `users_roles` - Links users with their roles
 - `books_categories` - Links books with their categories
 
@@ -118,7 +116,7 @@ ShoppingCart uses @MapsId for relationship with User
 StatusName - enum for order statuses
 RoleName - enum for user roles
 
-### 🛠 Tech Stack
+## 🛠 Tech Stack
 
  Technology        | Version               |
 |------------------|-----------------------|
@@ -136,7 +134,7 @@ RoleName - enum for user roles
 | Testcontainers   | 1.21.3                |
 
 
-### 📦 Functionality
+## 📦 Functionality
 
 | Feature           | Description                                                                 |
 |-------------------|------------------------------------------------------------------------------|
@@ -148,83 +146,100 @@ RoleName - enum for user roles
 | Testing           | Unit + integration tests using SQL fixtures and containerized DBs            |
 
 
-## 🗂 API Documentation
+## 🗂 API Endpoints
 
-### **Use for connection Swagger/Postman**
+####   Authentication
 
-http://localhost:8081/api/auth/login:
+✅ User Registration (POST: /api/auth/register)
 
-"email": "dmytro@example.com",
+✅ User Login (з JWT token) (POST: /api/auth/login)
 
-"password": "12345678910"
+#### Books Management
 
-Result: "token": "<your-jwt-token>"
+✅ Get All Books (with pagination) (GET: /api/books)
 
-Params:
-KEY: AUTHORIZATION ||
-VALUE: Bearer <your-jwt-token>
+✅ Get Book by ID (GET: /api/books/{id})
 
+✅ Create Book (Admin) (POST: /api/books/)
 
+✅ Update Book (Admin) (PATCH: /api/books/{id})
 
-- **Swagger UI**: [http://localhost:8081/api/swagger-ui/index.html](http://localhost:8081/api/swagger-ui/index.html#)
+✅ Delete Book (Admin) (DELETE: /api/books/{id})
 
-- **Postman Collection** http://localhost:8081/api/auth/login
+✅ Search Books (with filters) (GET: /api/books/search)
 
-###   Authentication
+#### Categories Management
 
-✅ User Registration
-✅ User Login (з JWT token)
+✅ Get All Categories (with pagination) (GET: /api/categories)
 
-### Books Management
+✅ Get Book by ID (GET: /api/categories/{id})
 
-✅ Get All Books (with pagination)
-✅ Get Book by ID
-✅ Create Book (Admin)
-✅ Update Book (Admin)
-✅ Delete Book (Admin)
-✅ Search Books (with filters)
+✅ Create Category (Admin) (POST: /api/categories/)
 
-### Categories Management
+✅ Update Category (Admin) (PATCH: /api/categories/{id})
 
-✅ CRUD операції для категорій
-✅ Get Books by Category
+✅ Delete Category (Admin) (DELETE: /api/categories/{id})
 
-### Shopping Cart
+✅ Get Books by Category (GET: /api/categories/{id}/books)
 
-✅ Get Cart
-✅ Add Book to Cart
-✅ Update Item Quantity
-✅ Remove Item from Cart
+#### Shopping Cart
 
-### Orders Management
+✅ Get Cart (GET: /api/cart)
 
-✅ Create Order
-✅ Get User Orders
-✅ Update Order Status (Admin)
-✅ Get Order Items
-✅ Get Orders by Status (Admin)
+✅ Add Book to Cart (POST: /api/cart)
 
-### 📥 How to Run Locally
+✅ Update Item Quantity (PUT: /api/cart/cart-items/{cartItemId})
+
+✅ Remove Item from Cart (DELETE: /api/cart/cart-items/{cartItemId})
+
+#### Orders Management
+
+✅ Create Order (POST: /api/orders)
+
+✅ Get User Orders (GET: /api/orders)
+
+✅ Update Order Status (Admin) (PATCH: /api/orders/{id})
+
+✅ Get Order Items (GET: /api/orders/{orderId}/items)
+
+✅ Get Order Items (GET: /api/orders/{orderId}/items)
+
+✅ Get one item by itemId from the order by orderId (GET: /api/orders/{orderId}/items/{itemId})
+
+✅ Get Orders by Status (Admin) (GET: /api/orders/status/{status})
+
+### Access Swagger UI
+For API documentation and testing, navigate to:
+```bash
+http://localhost:8081/api/swagger-ui/index.html#
+```
+Since the project uses Spring Security, you'll need to log in with the following credentials:
+**Username: dmytro@example.com**(USER, ADMIN roles)
+**Password: 12345678910**
+
+## 📥 How to Run Locally
 
 #### **_Step 1: Clone the Repository_**:
 
 https://github.com/kostya-savchenko/online-book-store
 
-bash# git clone <repository-url>
-
+```
 cd online-book-store
+```
 
 #### **_Step 2: Set Up Environment Variables_**:
 
-bash# Copy the environment template
+Copy the environment template
+```
 cp .env.template .env
+```
 
 #### **_Step 3: Configure Your .env File_**:
 
 Open the .env file and fill in the following variables:
 
-#### - Database Configuration:
-
+**Database Configuration:**
+```
 MYSQLDB_USER=root
 
 MYSQLDB_ROOT_PASSWORD=your_secure_password
@@ -234,30 +249,32 @@ MYSQLDB_DATABASE=book_store
 MYSQLDB_LOCAL_PORT=3307
 
 MYSQLDB_DOCKER_PORT=3306
+```
 
-
-#### - Spring Boot Configuration
+**Spring Boot Configuration**
+```
 SPRING_LOCAL_PORT=8081
 
 SPRING_DOCKER_PORT=8080
 
 DEBUG_PORT=5005
-
-#### ⚠️ Important:
+```
+**⚠️ Important:**
 Change MYSQLDB_ROOT_PASSWORD to your own secure password
 Make sure ports don't conflict with other services
 
 #### **_Step 4: Maven repackage_**:
-
-bash# Repackage the project with command: mvn clean package
+Repackage the project with command:
+```
+mvn clean package
+```
 
 #### **_Step 5: Run with Docker_**:
 
-bash# Start all services
+tart all services
+```
 docker-compose up --build
-
-#### Or run in background
-docker-compose up --build -d
+```
 
 #### **_Step 6: Verify the Setup_**:
 
