@@ -1,10 +1,8 @@
 # 📚 Online Book Store API
-
 A secure and extensible backend system for managing books, categories, users, and orders.  
 This API handles registration, JWT authentication, partial book updates via PATCH, role-based access control, and integration testing.
 It supports soft deletion using Hibernate annotations and uses Swagger for dynamic documentation.  
 The project is containerized with Docker, version-controlled via Liquibase, and designed to scale in production-ready environments.
----
 
 ## 🚀 Motivation
 
