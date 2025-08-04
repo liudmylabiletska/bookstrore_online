@@ -215,20 +215,598 @@ Since the project uses Spring Security, you'll need to log in with the following
 **Username: dmytro@example.com**(USER, ADMIN roles)
 **Password: 12345678910**
 
+## Postman Collection
+
+### 🔑 Authentication
+
+#### Register a New User
+- **Endpoint**: `POST /api/auth/registration`
+- **Description**: Registers a new user. 
+- **Example Link**: [http://localhost:8080/api/auth/registration](http://localhost:8080/api/auth/registration)
+- **Request Body**:
+  ```json
+  {
+    "email": "bob@example.com",
+    "password": "12345678",
+    "repeatPassword": "12345678",
+    "firstName": "Bob",
+    "lastName": "Alison",
+    "shippingAddress": "Bob's address"
+  }
+  ```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body**:
+  ```json
+  {
+    "id": 5,
+    "email": "bob@example.com",
+    "firstName": "Bob",
+    "lastName": "Alison",
+    "shippingAddress": "Bob's address"
+  }
+  ```
+#### User Login
+- **Endpoint**: `POST /api/auth/login`
+- **Description**: Logs in a registered user. Accessible for all users.
+- **Example Link**: [http://localhost:8080/api/auth/login](http://localhost:8080/api/auth/login)
+- **Request Body**:
+  ```json
+  {
+    "email": "bob@example.com",
+    "password": "12345678"
+  }
+  ```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body**:
+   ```json
+  {
+  "token": "your_jwt_token_here"
+  }
+  ```
+### 📖 Book
+
+#### Get All Books
+- **Endpoint**: `GET /api/books`
+- **Description**: Returns a list of all stored books. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8080/api/books](http://localhost:8080/api/books)
+- **Response**:
+  - **Status Code**: `200 OK`
+  - **Body** (example):
+  
+```json
+{
+"content": [
+{
+"id": 2,
+"title": "Triumphal arch",
+"author": "Erich Maria Remarque",
+"isbn": "san-126-85-02t",
+"price": 700.00,
+"description": "This is a sample book description.",
+"coverImage": "http://example.com/cover1.jpg",
+"categoryIds": [
+3,
+6
+]
+},
+{
+"id": 5,
+"title": "One Hundred Years of Solitude",
+"author": "Gabriel Garsia Marquez",
+"isbn": "san-123-45-02ttt2",
+"price": 800.00,
+"description": "This is a sample book description2.",
+"coverImage": "http://example.com/cover2.jpg",
+"categoryIds": [
+3,
+6
+]
+}
+],
+"page": {
+"size": 20,
+"number": 0,
+"totalElements": 2,
+"totalPages": 1
+}
+}
+  ```
+#### Get Book by ID
+- **Endpoint**: `GET /api/books/{id}`
+- **Description**: Returns a book by the specified ID. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8080/api/books/5](http://localhost:8080/api/books/5)
+- **Response**:
+  - **Status Code**: `200 OK`
+  - **Body** (example):
+ ```json
+{
+  "id": 5,
+  "title": "One Hundred Years of Solitude",
+  "author": "Gabriel Garsia Marquez",
+  "isbn": "san-123-45-02ttt2",
+  "price": 800.00,
+  "description": "This is a sample book description2.",
+  "coverImage": "http://example.com/cover2.jpg",
+  "categoryIds": [
+    3,
+    6
+  ]
+}
+```
+#### Search Books
+- **Endpoint**: `GET /api/books/search`
+- **Description**: Searches books using specified parameters. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8081/api/books/search?title=Triump](http://localhost:8081/api/books/search?title=Triump)
+- **Response**:
+  - **Status Code**: `200 OK`
+  - **Body** (example):
+```json
+{
+  "content": [
+    {
+      "id": 2,
+      "title": "Triumphal arch",
+      "author": "Erich Maria Remarque",
+      "isbn": "san-126-85-02t",
+      "price": 700.00,
+      "description": "This is a sample book description.",
+      "coverImage": "http://example.com/cover1.jpg",
+      "categoryIds": [
+        3,
+        6
+      ]
+    }
+  ],
+  "page": {
+    "size": 20,
+    "number": 0,
+    "totalElements": 1,
+    "totalPages": 1
+  }
+}
+```
+#### Create a New Book
+- **Endpoint**: `POST /api/books`
+- **Description**: Creates a new book in the database. Accessible for role **Admin**. **WARNING! Before adding a book, the corresponding category must be added**
+- **Example Link**: http://localhost:8080/api/books
+- **Request Body**:
+```json
+{
+  "title": "New Book",
+  "author": "New Author",
+  "isbn": "00000000000001",
+  "price": 100.99,
+  "description": "New description",
+  "coverImage": "https://example.com/newbook-cover-image.jpg",
+  "categoryIds": [1, 6]
+}
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 6,
+  "title": "New Book",
+  "author": "New Author",
+  "isbn": "00000000000001",
+  "price": 100.99,
+  "description": "New description",
+  "coverImage": "https://example.com/newbook-cover-image.jpg",
+  "categoryIds": [
+    1,
+    6
+  ]
+}
+```
+#### Update a Book
+- **Endpoint**: `PATCH /api/books/{id}`
+- **Description**: Updates the book with the specified ID. Accessible for role **Admin**.
+- **Example Link**: [http://localhost:8080/api/books/1](http://localhost:8080/api/books/1)
+- **Request Body**:
+```json
+{
+  "title": "Book",
+  "author": "New Author",
+  "isbn": "00000000000001",
+  "price": 222.99,
+  "description": "New description",
+  "coverImage": "https://example.com/newbook-cover-image.jpg",
+  "categoryIds": [1, 6]
+}
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 6,
+  "title": "Book",
+  "author": "New Author",
+  "isbn": "00000000000001",
+  "price": 222.99,
+  "description": "New description",
+  "coverImage": "https://example.com/newbook-cover-image.jpg",
+  "categoryIds": [
+    1,
+    6
+  ]
+}
+```
+#### Delete a Book
+- **Endpoint**: `DELETE /api/books/{id}`
+- **Description**: Soft-deletes a book with the specified ID from the database. Accessible for role **Admin**.
+- **Example Link**: [http://localhost:8080/api/books/1](http://localhost:8080/api/books/6)
+- **Response**:
+  - **Status Code**: `204 No content`
+
+### 📜 Category
+
+#### Create a New Category
+- **Endpoint**: `POST /api/categories`
+- **Description**: Creates a new category. Accessible for role **Admin**.
+- **Example Link**: [http://localhost:8080/api/categories](http://localhost:8080/api/categories)
+- **Request Body**:
+```json
+{
+  "name": "Adventures",
+  "description": "Books about adventures"
+}
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 8,
+  "name": "Adventures",
+  "description": "Books about adventures"
+}
+```
+#### Get All Categories
+- **Endpoint**: `GET /api/categories`
+- **Description**: Returns a list of all categories from the database. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8080/api/categories](http://localhost:8080/api/categories)
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "content": [
+    {
+      "id": 1,
+      "name": "Science Fiction",
+      "description": "Books set in futuristic or imaginative worlds"
+    },
+    {
+      "id": 2,
+      "name": "Mystery",
+      "description": "Detective stories and whodunits"
+    },
+    {
+      "id": 3,
+      "name": "Biography",
+      "description": "Life stories of notable individuals"
+    },
+    {
+      "id": 4,
+      "name": "Fantasy",
+      "description": "Books with magic, mythical creatures, and imaginary worlds"
+    },
+    {
+      "id": 5,
+      "name": "Self-Help",
+      "description": "Guides for personal growth and motivation"
+    },
+    {
+      "id": 6,
+      "name": "Drama",
+      "description": "Narrative works focused on realistic characters, emotional conflict, and dramatic themes"
+    },
+    {
+      "id": 7,
+      "name": "Programming",
+      "description": "Books dedicated to creating, debugging and optimizing software"
+    },
+    {
+      "id": 8,
+      "name": "Adventures",
+      "description": "Books about adventures"
+    }
+  ],
+  "page": {
+    "size": 20,
+    "number": 0,
+    "totalElements": 8,
+    "totalPages": 1
+  }
+}
+```
+#### Get Books by Category
+- **Endpoint**: `GET /api/categories/{id}/books`
+- **Description**: Returns a list of books that belong to a specific category. Accessible for roles **User**.
+- **Example Link**: [http://localhost:8080/api/categories/6/books](http://localhost:8080/api/categories/6/books)
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "content": [
+    {
+      "id": 2,
+      "title": "Triumphal arch",
+      "author": "Erich Maria Remarque",
+      "isbn": "san-126-85-02t",
+      "price": 700.00,
+      "description": "This is a sample book description.",
+      "coverImage": "http://example.com/cover1.jpg"
+    },
+    {
+      "id": 5,
+      "title": "One Hundred Years of Solitude",
+      "author": "Gabriel Garsia Marquez",
+      "isbn": "san-123-45-02ttt2",
+      "price": 800.00,
+      "description": "This is a sample book description2.",
+      "coverImage": "http://example.com/cover2.jpg"
+    }
+  ],
+  "page": {
+    "size": 20,
+    "number": 0,
+    "totalElements": 2,
+    "totalPages": 1
+  }
+}
+```
+#### Update a Category
+- **Endpoint**: `PATCH /api/categories/{id}`
+- **Description**: Updates the category with the specified ID. Accessible for role **Admin**.
+- **Example Link**: [http://localhost:8080/api/categories/8](http://localhost:8080/api/categories/8)
+- **Request Body**:
+```json
+{
+  "name": "Adventures",
+  "description": "Updated description"
+}
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 8,
+  "name": "Adventures",
+  "description": "Updated description"
+}
+```
+#### Delete a Category
+- **Endpoint**: `DELETE /api/categories/{id}`
+- **Description**: Soft-deletes the category with the specified ID. Accessible for role **Admin**.
+- **Example Link**: [http://localhost:8080/api/categories/8](http://localhost:8080/api/categories/8)
+- **Response**:
+  - **Status Code**: `204 No content`
+
+### 🧾 Order
+
+#### Get All Orders
+- **Endpoint**: `GET /api/orders`
+- **Description**: Returns a list of all orders. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8080/api/orders](http://localhost:8080/api/orders)
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+[
+  {
+    "id": 1,
+    "userId": 4,
+    "orderItems": [
+      {
+        "id": 1,
+        "bookId": 2,
+        "quantity": 1
+      }
+    ],
+    "orderDate": "2025-08-04T15:33:41",
+    "total": 700.00,
+    "status": "pending"
+  }
+]
+```
+#### Get Order Items
+- **Endpoint**: `GET /api/orders/{orderId}/items`
+- **Description**: Returns a list of items in a specific order. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8080/api/orders/1/items](http://localhost:8080/api/orders/1/items)
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+[
+  {
+    "id": 1,
+    "bookId": 2,
+    "quantity": 1
+  }
+]
+```
+#### Get Specific Order Item
+- **Endpoint**: `GET /api/orders/{orderId}/items/{itemId}`
+- **Description**: Returns a specific item from a specific order. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8080/api/orders/1/items/1](http://localhost:8080/api/orders/1/items/1)
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 1,
+  "bookId": 2,
+  "quantity": 1
+}
+```
+#### Create a New Order
+- **Endpoint**: `POST /api/orders`
+- **Description**: Creates a new order. Accessible for roles **User** and **Admin**.
+- **Example Link**: [http://localhost:8080/api/orders](http://localhost:8080/api/orders)
+- **Request Body**:
+```json
+{
+  "shippingAddress": "New address"
+}
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 1,
+  "userId": 4,
+  "orderItems": [
+    {
+      "id": 1,
+      "bookId": 2,
+      "quantity": 1
+    }
+  ],
+  "orderDate": "2025-08-04T15:33:41",
+  "total": 700.00,
+  "status": "pending"
+}
+```
+#### Update Order Status
+- **Endpoint**: `PATCH /api/orders/{id}`
+- **Description**: Updates the status of an order. Accessible for role **Admin**.
+- **Example Link**: [http://localhost:8080/api/orders/1](http://localhost:8080/api/orders/1)
+- **Request Body**:
+```json
+  {
+    "status": "completed"
+  }
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 1,
+  "userId": 4,
+  "orderItems": [
+    {
+      "id": 1,
+      "bookId": 2,
+      "quantity": 1
+    }
+  ],
+  "orderDate": "2025-08-04T15:33:41",
+  "total": 700.00,
+  "status": "completed"
+}
+```
+### 🛒 Shopping Cart
+
+#### Get Shopping Cart
+- **Endpoint**: `GET /api/cart`
+- **Description**: Returns the shopping cart of the logged-in user.
+- **Example Link**: [http://localhost:8080/api/cart](http://localhost:8080/api/cart)
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 4,
+  "userId": 4,
+  "cartItems": [
+    {
+      "id": 1,
+      "bookId": 5,
+      "bookTitle": "One Hundred Years of Solitude",
+      "quantity": 4
+    }
+  ]
+}
+```
+#### Add Book to Shopping Cart
+- **Endpoint**: `POST /api/cart`
+- **Description**: Adds a book to the shopping cart of the logged-in user.
+- **Example Link**: [http://localhost:8080/api/cart](http://localhost:8080/api/cart)
+- **Request Body**:
+```json
+[
+  {
+  "bookId": 5,
+  "quantity": 4
+  }
+]
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 4,
+  "userId": 4,
+  "cartItems": [
+    {
+      "id": 1,
+      "bookId": 5,
+      "bookTitle": "One Hundred Years of Solitude",
+      "quantity": 4
+    }
+  ]
+}
+```
+#### Update Cart Item Quantity
+- **Endpoint**: `PUT /api/cart/cart-items/{itemId}`
+- **Description**: Changes the quantity of a cart item with the specified ID.
+- **Example Link**: [http://localhost:8080/api/cart/cart-items/1](http://localhost:8080/api/cart-items/items/1)
+- **Request Body**:
+```json
+{
+  "quantity": 1
+}
+```
+- **Response**:
+  - **Status Code**: `200 Ok`
+  - **Body** (example):
+```json
+{
+  "id": 4,
+  "userId": 4,
+  "cartItems": [
+    {
+      "id": 1,
+      "bookId": 5,
+      "bookTitle": "One Hundred Years of Solitude",
+      "quantity": 1
+    }
+  ]
+}
+```
+#### Delete Cart Item
+- **Endpoint**: `DELETE /api/cart/cart-items/{itemId}`
+- **Description**: Soft-deletes a cart item with the specified ID.
+- **Example Link**: [http://localhost:8080/api/cart/cart-items/1](http://localhost:8080/api/cart-items/1)
+- **Response**:
+  - **Status Code**: `204 No content`
+
+
 ## 📥 How to Run Locally
 
 #### **_Step 1: Clone the Repository_**:
 
 https://github.com/kostya-savchenko/online-book-store
 
-```
+```bash
+git clone https://github.com/kostya-savchenko/online-book-store.git
 cd online-book-store
 ```
 
 #### **_Step 2: Set Up Environment Variables_**:
 
 Copy the environment template
-```
+```bash
 cp .env.template .env
 ```
 
@@ -263,14 +841,14 @@ Make sure ports don't conflict with other services
 
 #### **_Step 4: Maven repackage_**:
 Repackage the project with command:
-```
+```bash
 mvn clean package
 ```
 
 #### **_Step 5: Run with Docker_**:
 
-tart all services
-```
+Start all services
+```bash
 docker-compose up --build
 ```
 
