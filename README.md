@@ -384,7 +384,7 @@ Since the project uses Spring Security, you'll need to log in with the following
 }
 ```
 - **Response**:
-  - **Status Code**: `200 Ok`
+  - **Status Code**: `201 Created`
   - **Body** (example):
 ```json
 {
@@ -456,7 +456,7 @@ Since the project uses Spring Security, you'll need to log in with the following
 }
 ```
 - **Response**:
-  - **Status Code**: `200 Ok`
+  - **Status Code**: `201 Created`
   - **Body** (example):
 ```json
 {
@@ -657,7 +657,7 @@ Since the project uses Spring Security, you'll need to log in with the following
 }
 ```
 - **Response**:
-  - **Status Code**: `200 Ok`
+  - **Status Code**: `201 Created`
   - **Body** (example):
 ```json
 {
@@ -741,7 +741,7 @@ Since the project uses Spring Security, you'll need to log in with the following
 ]
 ```
 - **Response**:
-  - **Status Code**: `200 Ok`
+  - **Status Code**: `201 Created`
   - **Body** (example):
 ```json
 {
