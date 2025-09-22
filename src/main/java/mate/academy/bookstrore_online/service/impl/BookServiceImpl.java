@@ -1,8 +1,9 @@
-package mate.academy.bookstrore_online.service;
+package mate.academy.bookstrore_online.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstrore_online.model.Book;
 import mate.academy.bookstrore_online.repository.BookRepository;
+import mate.academy.bookstrore_online.service.BookService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

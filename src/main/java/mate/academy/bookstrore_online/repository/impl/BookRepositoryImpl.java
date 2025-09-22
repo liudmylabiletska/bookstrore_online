@@ -1,9 +1,10 @@
-package mate.academy.bookstrore_online.repository;
+package mate.academy.bookstrore_online.repository.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstrore_online.exception.DataProcessingException;
 import mate.academy.bookstrore_online.model.Book;
+import mate.academy.bookstrore_online.repository.BookRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
