@@ -1,4 +1,4 @@
-#Mon Sep 22 18:00:12 CEST 2025
+#Mon Sep 22 18:03:24 CEST 2025
 C\:\\bookstrore_online\\src\\main\\resources\\application.properties=1758556660247
 configuration*?=9C9D007443AE6540A12092AED9B4D3E615C616B5
 C\:\\bookstrore_online\\src\\test\\resources\\application.properties=1758547884141
@@ -7,5 +7,5 @@ C\:\\bookstrore_online\\src\\main\\java\\mate\\academy\\bookstore_online\\reposi
 C\:\\bookstrore_online\\src\\main\\java\\mate\\academy\\bookstore_online\\repository\\impl\\BookRepositoryImpl.java=1758556595573
 C\:\\bookstrore_online\\src\\main\\java\\mate\\academy\\bookstore_online\\BookstoreOnlineApplication.java=1758556595618
 C\:\\bookstrore_online\\src\\main\\java\\mate\\academy\\bookstore_online\\service\\BookService.java=1758556595589
-C\:\\bookstrore_online\\src\\main\\java\\mate\\academy\\bookstore_online\\model\\Book.java=1758556595594
+C\:\\bookstrore_online\\src\\main\\java\\mate\\academy\\bookstore_online\\model\\Book.java=1758556968943
 C\:\\bookstrore_online\\src\\main\\java\\mate\\academy\\bookstore_online\\exception\\DataProcessingException.java=1758556595581
