@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>mate.academy</groupId>
-    <artifactId>bookstrore_online</artifactId>
+    <artifactId>bookstore_online</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bookstrore_online</name>
-    <description>bookstrore_online</description>
+    <name>bookstore_online</name>
+    <description>bookstore_online</description>
     <url/>
     <licenses>
         <license/>
@@ -38,6 +38,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
             <optional>true</optional>
         </dependency>
         <dependency>
