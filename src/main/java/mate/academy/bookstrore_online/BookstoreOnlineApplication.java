@@ -1,8 +1,8 @@
-package mate.academy.bookstore_online;
+package mate.academy.bookstrore_online;
 
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstore_online.model.Book;
-import mate.academy.bookstore_online.service.BookService;
+import mate.academy.bookstrore_online.model.Book;
+import mate.academy.bookstrore_online.service.BookService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

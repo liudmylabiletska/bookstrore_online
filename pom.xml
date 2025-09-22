@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>mate.academy</groupId>
-    <artifactId>book_online_store</artifactId>
+    <artifactId>bookstrore_online</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>book_online_store</name>
-    <description>online-book-store</description>
+    <name>bookstrore_online</name>
+    <description>bookstrore_online</description>
     <url/>
     <licenses>
         <license/>
