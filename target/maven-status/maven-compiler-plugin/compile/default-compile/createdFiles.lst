@@ -1,0 +1,7 @@
+mate\academy\bookstore_online\exception\DataProcessingException.class
+mate\academy\bookstore_online\repository\BookRepositoryImpl.class
+mate\academy\bookstore_online\service\impl\BookServiceImpl.class
+mate\academy\bookstore_online\BookstoreOnlineApplication.class
+mate\academy\bookstore_online\repository\BookRepository.class
+mate\academy\bookstore_online\service\BookService.class
+mate\academy\bookstore_online\model\Book.class
