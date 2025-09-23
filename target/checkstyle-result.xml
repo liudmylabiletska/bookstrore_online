@@ -1,21 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="9.3">
-<file name="C:\bookstrore_online\src\main\java\mate\academy\bookstore_online\BookstoreOnlineApplication.java">
-</file>
-<file name="C:\bookstrore_online\src\main\java\mate\academy\bookstore_online\exception\DataProcessingException.java">
-</file>
-<file name="C:\bookstrore_online\src\main\java\mate\academy\bookstore_online\model\Book.java">
-</file>
-<file name="C:\bookstrore_online\src\main\java\mate\academy\bookstore_online\repository\BookRepository.java">
-</file>
-<file name="C:\bookstrore_online\src\main\java\mate\academy\bookstore_online\repository\impl\BookRepositoryImpl.java">
-</file>
-<file name="C:\bookstrore_online\src\main\java\mate\academy\bookstore_online\service\BookService.java">
-</file>
-<file name="C:\bookstrore_online\src\main\java\mate\academy\bookstore_online\service\impl\BookServiceImpl.java">
-</file>
-<file name="C:\bookstrore_online\src\main\resources\application.properties">
-</file>
-<file name="C:\bookstrore_online\src\test\resources\application.properties">
-</file>
 </checkstyle>
