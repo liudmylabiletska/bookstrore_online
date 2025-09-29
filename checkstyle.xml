@@ -8,6 +8,7 @@
         <property name="max" value="120"/>
         <property name="ignorePattern" value="^package|import|\\s\\*@|a href"/>
     </module>
+
     <module name="TreeWalker">
         <module name="MethodName"/>
         <module name="LocalVariableName"/>
