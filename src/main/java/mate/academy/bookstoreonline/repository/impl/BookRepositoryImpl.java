@@ -1,16 +1,16 @@
 package mate.academy.bookstoreonline.repository.impl;
 
-import java.util.List;
-import java.util.Optional;
-
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstoreonline.exception.DataProcessingException;
 import mate.academy.bookstoreonline.model.Book;
 import mate.academy.bookstoreonline.repository.BookRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,7 +31,7 @@ public class BookRepositoryImpl implements BookRepository {
             if (transaction != null && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Cannot insert book:" + book, e);
+            throw new EntityNotFoundException("Cannot insert book:" + book, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -44,7 +44,7 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Book", Book.class).getResultList();
         } catch (Exception e) {
-            throw new DataProcessingException("Cannot find all books", e);
+            throw new EntityNotFoundException("Cannot find all books", e);
         }
     }
 
@@ -53,7 +53,7 @@ public class BookRepositoryImpl implements BookRepository {
         try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.get(Book.class, id));
         } catch (Exception e) {
-            throw new DataProcessingException("Cannot find book with id: " + id, e);
+            throw new EntityNotFoundException("Cannot find book with id: " + id, e);
         }
     }
 }
