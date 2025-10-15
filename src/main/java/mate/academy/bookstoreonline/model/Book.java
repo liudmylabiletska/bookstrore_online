@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Table(name = "books")
 @Getter
 @Setter
@@ -28,14 +27,9 @@ public class Book {
     @Column(nullable = false, unique = true)
     private String isbn;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(columnDefinition = "TEXT")
     private String description;
-
     private String coverImage;
-
-    @Column(nullable = false)
-    private boolean isDeleted = false;
 }
