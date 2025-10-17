@@ -9,9 +9,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
-
     BookDto toDto(Book book);
 
     @Mapping(target = "id", ignore = true)
-    Book toModel(CreateBookRequestDto dto);
+    Book toModel(CreateBookRequestDto createBookRequestDto);
 }

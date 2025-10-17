@@ -11,8 +11,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
-@Repository
 @RequiredArgsConstructor
+@Repository
 public class BookRepositoryImpl implements BookRepository {
     private final SessionFactory sessionFactory;
 
@@ -27,7 +27,7 @@ public class BookRepositoryImpl implements BookRepository {
             transaction.commit();
             return book;
         } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
+            if (transaction != null) {
                 transaction.rollback();
             }
             throw new DataProcessingException("Cannot insert book:" + book, e);
@@ -37,22 +37,21 @@ public class BookRepositoryImpl implements BookRepository {
             }
         }
     }
-
     @Override
     public List<Book> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Book", Book.class).getResultList();
+            return session.createQuery("FROM Book", Book.class).getResultList();
         } catch (Exception e) {
-            throw new DataProcessingException("Cannot find all books", e);
+            throw new DataProcessingException("Can't get all books", e);
         }
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
+    public Optional<Book> getBookById(Long id) {
         try (Session session = sessionFactory.openSession()) {
             return Optional.ofNullable(session.get(Book.class, id));
         } catch (Exception e) {
-            throw new DataProcessingException("Cannot find book with id: " + id, e);
+            throw new DataProcessingException("Can't get book by id: " + id, e);
         }
     }
 }
