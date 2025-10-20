@@ -1,23 +1,19 @@
 package mate.academy.bookstoreonline.model;
 
+import java.math.BigDecimal;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
-@Entity
-@Data
-@NoArgsConstructor
-@Table(name = "books")
 @Getter
 @Setter
+@SQLRestriction("is_deleted = false")
+@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id = ?")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +33,7 @@ public class Book {
 
     private String description;
     private String coverImage;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
 }
