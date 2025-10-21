@@ -1,7 +1,6 @@
-package mate.academy.bookonline.controller;
+package mate.academy.bookstoreonline.controller;
 
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstoreonline.dto.BookDto;
 import mate.academy.bookstoreonline.dto.CreateBookRequestDto;
@@ -23,14 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
+
     @GetMapping
-    public List<BookDto> getAll() {
+    public List<BookDto> findAll() {
         return bookService.findAll();
     }
+
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public BookDto createBook(@RequestBody CreateBookRequestDto requestDto) {
