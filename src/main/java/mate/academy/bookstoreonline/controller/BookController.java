@@ -1,6 +1,5 @@
 package mate.academy.bookstoreonline.controller;
 
-import java.util.List;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstoreonline.dto.BookDto;
@@ -10,6 +9,8 @@ import mate.academy.bookstoreonline.dto.UpdateBookRequestDto;
 import mate.academy.bookstoreonline.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,15 +30,15 @@ public class BookController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
-        return bookService.save(requestDto);
+    public BookDto save(@RequestBody @Valid CreateBookRequestDto requestBook) {
+        return bookService.save(requestBook);
     }
 
     @PutMapping("/{id}")
     public BookDto updateBook(
             @PathVariable Long id,
-            @RequestBody @Valid UpdateBookRequestDto requestDto) {
-        return bookService.update(id, requestDto);
+            @RequestBody @Valid UpdateBookRequestDto requestBook) {
+        return bookService.update(id, requestBook);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -49,5 +50,10 @@ public class BookController {
     @GetMapping("/search")
     public List<BookDto> search(BookSearchParametersDto bookSearchParametersDto) {
         return bookService.search(bookSearchParametersDto);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(@Valid BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters);
     }
 }
