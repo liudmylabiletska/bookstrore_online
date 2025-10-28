@@ -1,9 +1,9 @@
 package mate.academy.bookstoreonline.service.impl;
 
-import java.util.List;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstoreonline.dto.BookDto;
+import mate.academy.bookstoreonline.dto.BookSearchParametersDto;
 import mate.academy.bookstoreonline.dto.CreateBookRequestDto;
 import mate.academy.bookstoreonline.dto.UpdateBookRequestDto;
 import mate.academy.bookstoreonline.mapper.BookMapper;
@@ -11,6 +11,9 @@ import mate.academy.bookstoreonline.model.Book;
 import mate.academy.bookstoreonline.repository.BookRepository;
 import mate.academy.bookstoreonline.service.BookService;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +56,10 @@ public class BookServiceImpl implements BookService {
         if (bookRepository.existsById(id)) {
             bookRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public List<BookDto> search(BookSearchParametersDto searchParameters) {
+        return Collections.emptyList();
     }
 }
