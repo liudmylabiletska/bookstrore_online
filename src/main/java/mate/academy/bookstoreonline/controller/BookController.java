@@ -1,5 +1,8 @@
 package mate.academy.bookstoreonline.controller;
 
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import mate.academy.bookstoreonline.dto.BookSearchParametersDto;
 import mate.academy.bookstoreonline.dto.BookDto;
 import mate.academy.bookstoreonline.dto.BookSearchParametersDto;
 import mate.academy.bookstoreonline.dto.CreateBookRequestDto;
@@ -57,5 +60,7 @@ public class BookController {
     @GetMapping("/search")
     public List<BookDto> searchBooks(@Valid BookSearchParametersDto searchParameters) {
         return bookService.search(searchParameters);
+    public List<BookDto> search(BookSearchParametersDto bookSearchParametersDto) {
+        return bookService.search(bookSearchParametersDto);
     }
 }
