@@ -8,12 +8,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(config = mate.academy.bookstoreonline.config.MapperConfig.class,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BookMapper {
+
     BookDto toDto(Book book);
 
     @Mapping(target = "id", ignore = true)
@@ -22,5 +21,8 @@ public interface BookMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    void updateBookFromDto(UpdateBookRequestDto updateBookRequestDto, @MappingTarget Book book);
+    default void updateModel(
+            UpdateBookRequestDto updateBookRequestDto,
+            @MappingTarget Book book) {
+    }
 }
