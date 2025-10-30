@@ -19,14 +19,22 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public BookDto save(@RequestBody @
-
-            Valid CreateBookRequestDto bookDto) {
+    public BookDto save(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
+    @GetMapping
+    public List<BookDto> findAll() {
+        return bookService.findAll();
+    }
+
+    @GetMapping("/{id}") 
+    public BookDto findById(@PathVariable Long id) {
+        return bookService.findById(id);
+    }
+
     @PutMapping("{id}")
-    public BookDto update(@PathVariable Long id, @RequestBody UpdateBookRequestDto bookDto) {
+    public BookDto update(@PathVariable Long id, @RequestBody @Valid UpdateBookRequestDto bookDto) {
         return bookService.update(id, bookDto);
     }
 
