@@ -1,17 +1,20 @@
 package mate.academy.bookstoreonline.controller;
 
+import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstoreonline.dto.BookDto;
 import mate.academy.bookstoreonline.dto.BookSearchParametersDto;
 import mate.academy.bookstoreonline.dto.CreateBookRequestDto;
 import mate.academy.bookstoreonline.dto.UpdateBookRequestDto;
 import mate.academy.bookstoreonline.service.BookService;
-import jakarta.validation.Valid;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,8 +35,8 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookDto> findAll() {
-        return bookService.findAll();
+    public List<BookDto> findAll(Pageable pageable) {
+        return bookService.findAll(pageable);
     }
 
     @GetMapping("/{id}") 
