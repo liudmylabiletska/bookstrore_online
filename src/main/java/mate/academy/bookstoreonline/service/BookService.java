@@ -1,17 +1,17 @@
 package mate.academy.bookstoreonline.service;
 
-import java.util.List;
 import mate.academy.bookstoreonline.dto.BookDto;
 import mate.academy.bookstoreonline.dto.BookSearchParametersDto;
 import mate.academy.bookstoreonline.dto.CreateBookRequestDto;
 import mate.academy.bookstoreonline.dto.UpdateBookRequestDto;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 public interface BookService {
 
     BookDto save(CreateBookRequestDto requestDto);
 
-    List<BookDto> findAll(Pageable pageable);
+    Page<BookDto> findAll(Pageable pageable);
 
     BookDto findById(Long id);
 
@@ -19,5 +19,5 @@ public interface BookService {
 
     void deleteById(Long id);
 
-    List<BookDto> search(BookSearchParametersDto bookSearchParametersDto);
+    Page<BookDto> search(BookSearchParametersDto params, Pageable pageable);
 }
