@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Product management", description = "Endpoints for managing books")
+@Tag(name = "Book Management", description = "Endpoints for managing books")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/books")
