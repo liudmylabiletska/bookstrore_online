@@ -1,47 +1,46 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: create-user-table
       author: liudmylabiletska
+      validCheckSum: ANY
       changes:
         - createTable:
-            tableName: books
+            tableName: users
             columns:
               - column:
                   name: id
-                  type: BIGINT
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-              - column:
-                  name: title
-                  type: VARCHAR(255)
-                  constraints:
                     nullable: false
               - column:
-                  name: author
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: isbn
-                  type: VARCHAR(20)
+                  name: email
+                  type: varchar(255)
                   constraints:
                     nullable: false
                     unique: true
               - column:
-                  name: price
-                  type: DECIMAL(10,2)
+                  name: password
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: description
-                  type: VARCHAR(255)
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
               - column:
-                  name: cover_image
-                  type: VARCHAR(500)
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: shipping_address
+                  type: varchar(255)
               - column:
                   name: is_deleted
-                  type: BOOLEAN
-                  defaultValueBoolean: false
+                  type: tinyint(1)
+                  defaultValue: false
                   constraints:
                     nullable: false
