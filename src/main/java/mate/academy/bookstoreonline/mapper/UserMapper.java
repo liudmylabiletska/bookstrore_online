@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    User toUser(UserRegistrationRequestDto dto);
+    User toModel(UserRegistrationRequestDto dto);
 
-    UserResponseDto toUserResponse(User user);
+    UserResponseDto toDto(User user);
 }
