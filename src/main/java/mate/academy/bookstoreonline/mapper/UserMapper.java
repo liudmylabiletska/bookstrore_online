@@ -3,15 +3,29 @@ package mate.academy.bookstoreonline.mapper;
 import mate.academy.bookstoreonline.config.MapperConfig;
 import mate.academy.bookstoreonline.dto.user.UserRegistrationRequestDto;
 import mate.academy.bookstoreonline.dto.user.UserResponseDto;
+import mate.academy.bookstoreonline.model.Role;
 import mate.academy.bookstoreonline.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(config = MapperConfig.class)
 public interface UserMapper {
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "roles", source = "roles")
     UserResponseDto toDto(User user);
-    
+
     User toModel(UserRegistrationRequestDto requestDto);
 
+    default List<String> mapRolesToStrings(Set<Role> roles) {
+        if (roles == null) {
+            return Collections.emptyList();
+        }
+        return roles.stream()
+                .map(Role::getRoleName)
+                .map(Enum::name)
+                .toList();
+    }
 }
