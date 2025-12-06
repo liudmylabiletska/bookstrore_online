@@ -1,6 +1,7 @@
 package mate.academy.bookstoreonline.dto.user;
 
 import lombok.Data;
+import java.util.List;
 
 @Data
 public class UserResponseDto {
@@ -9,4 +10,5 @@ public class UserResponseDto {
     private String firstName;
     private String lastName;
     private String shippingAddress;
+    private List<String> roles;
 }
