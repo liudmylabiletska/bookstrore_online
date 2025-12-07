@@ -14,7 +14,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                - column:
+            - column:
                     name: is_deleted
                     type: BOOLEAN
                     defaultValueBoolean: false
