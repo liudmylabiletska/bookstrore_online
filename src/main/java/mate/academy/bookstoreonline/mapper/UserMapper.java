@@ -14,18 +14,7 @@ import java.util.stream.Collectors;
 
 @Mapper(config = MapperConfig.class)
 public interface UserMapper {
-    @Mapping(target = "roles", source = "roles")
     UserResponseDto toDto(User user);
 
     User toModel(UserRegistrationRequestDto requestDto);
-
-    default List<String> mapRolesToStrings(Set<Role> roles) {
-        if (roles == null) {
-            return Collections.emptyList();
-        }
-        return roles.stream()
-                .map(Role::getRoleName)
-                .map(Enum::name)
-                .toList();
-    }
 }
