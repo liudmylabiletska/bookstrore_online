@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 06-create-users-roles-table
+      id: create-users-roles-table
       author: liudmylabiletska
       comment: created table for users_id_roles_id
       changes:

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 08-asegn-default-user-role
+      id: asegn-default-user-role
       author: liudmylabiletska
       comment: Assign the USER role to all existing users who do not have any roles assigned.
       changes:

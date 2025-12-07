@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 05-create-role-table
+      id: create-role-table
       author: liudmylabiletska
       comment: creating role table with roles (USER, ADMIN).
       changes:

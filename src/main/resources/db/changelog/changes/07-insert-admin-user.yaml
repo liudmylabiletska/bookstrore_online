@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 07-insert-admin-user
+      id: insert-admin-user
       author: liudmylabiletska
       comment: Adding the first administrator user (admin@exampl.com) and assigning him the ADMIN role.
       changes:
