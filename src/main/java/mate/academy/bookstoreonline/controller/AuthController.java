@@ -28,7 +28,7 @@ public class AuthController {
             description = "Authenticates a user by verifying email and password. "
                     + "Returns a JWT token if credentials are valid."
     )
-    UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
+    public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
         return authenticationService.authenticate(requestDto);
     }
 
