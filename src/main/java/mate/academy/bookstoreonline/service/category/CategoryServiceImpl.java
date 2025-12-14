@@ -1,5 +1,6 @@
 package mate.academy.bookstoreonline.service.category;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstoreonline.dto.book.BookDtoWithoutCategoryIds;
 import mate.academy.bookstoreonline.dto.book.CategoryDto;
@@ -11,10 +12,9 @@ import mate.academy.bookstoreonline.model.Book;
 import mate.academy.bookstoreonline.model.Category;
 import mate.academy.bookstoreonline.repository.BookRepository;
 import mate.academy.bookstoreonline.repository.CategoryRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +25,9 @@ public class CategoryServiceImpl implements CategoryService {
     private final BookMapper bookMapper;
 
     @Override
-    public List<CategoryDto> findAll(Pageable pageable) {
-        return categoryRepository.findAll(pageable).stream()
-                .map(categoryMapper::toDto)
-                .toList();
+    public Page<CategoryDto> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+                .map(categoryMapper::toDto);
     }
 
     @Override
@@ -62,10 +61,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long categoryId, Pageable pageable) {
-        List<Book> books = bookRepository.findAllByCategoriesId(categoryId, pageable);
-        return books.stream()
-                .map(bookMapper::toDtoWithoutCategories)
-                .toList();
+    public Page<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id, Pageable pageable) {
+        Page<Book> booksPage = bookRepository.findAllByCategoriesId(id, pageable);
+        return booksPage.map(bookMapper::toDtoWithoutCategoryIds);
     }
 }

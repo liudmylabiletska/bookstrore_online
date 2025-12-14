@@ -2,6 +2,11 @@ package mate.academy.bookstoreonline.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstoreonline.dto.book.BookDtoWithoutCategoryIds;
@@ -10,12 +15,11 @@ import mate.academy.bookstoreonline.dto.book.CategoryRequestDto;
 import mate.academy.bookstoreonline.mapper.BookMapper;
 import mate.academy.bookstoreonline.repository.BookRepository;
 import mate.academy.bookstoreonline.service.category.CategoryService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Category", description = "Provides endpoints for managing book categories")
 @RequiredArgsConstructor
@@ -50,7 +54,7 @@ public class CategoryController {
     )
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping
-    public List<CategoryDto> getAll(Pageable pageable) {
+    public Page<CategoryDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
@@ -83,13 +87,17 @@ public class CategoryController {
         categoryService.deleteById(id);
     }
 
-    @Operation(summary = "Get books by category ID",
-            description = "Allows users with 'USER' authority to retrieve a list of books "
-                    + "that belong to the specified category."
-    )
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @Operation(summary = "Get all books by category ID",
+            description = "Returns a paginated list of books assigned to a specific category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Books retrieved successfully",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation
+                            = BookDtoWithoutCategoryIds.class)))),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/{id}/books")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id, Pageable pageable) {
-        return categoryService.getBooksByCategoryId(id,pageable);
+    public Page<BookDtoWithoutCategoryIds> getAllBooksByCategoryId(@PathVariable Long id, Pageable pageable) {
+        return categoryService.getBooksByCategoryId(id, pageable);
     }
 }

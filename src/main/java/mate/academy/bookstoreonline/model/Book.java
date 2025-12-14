@@ -49,7 +49,7 @@ public class Book {
 
     @ManyToMany
     @JoinTable(
-            name = "book_category",
+            name = "book_categories",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
