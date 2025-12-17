@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 public record CartItemResponseDto(
         @NotNull
         @Positive
-        Long id,
+        Long bookId,
         @Positive
         int quantity
 ) {

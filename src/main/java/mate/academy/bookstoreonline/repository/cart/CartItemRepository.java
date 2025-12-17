@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    Optional<CartItem> findByIdAndShoppingCart(Long id, ShoppingCart cart);
+    Optional<CartItem> findByIdAndShoppingCartId(Long id, Long shoppingCartId);
 
-    void deleteByIdAndShoppingCart(Long id, ShoppingCart cart);
+    void deleteByIdAndShoppingCartId(Long id, Long shoppingCartId);
 }

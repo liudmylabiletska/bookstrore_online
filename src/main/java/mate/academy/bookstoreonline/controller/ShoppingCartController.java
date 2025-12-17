@@ -41,6 +41,7 @@ public class ShoppingCartController {
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Create cart item method",
             description = "Creates book item in cart")
+    @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCartDto create(Authentication authentication,
                                   @RequestBody @Valid CartItemResponseDto dto) {
         return shoppingCartService.save(authentication, dto);
