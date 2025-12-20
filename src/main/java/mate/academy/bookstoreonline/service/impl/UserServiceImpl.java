@@ -12,6 +12,7 @@ import mate.academy.bookstoreonline.model.enums.RoleName;
 import mate.academy.bookstoreonline.repository.RoleRepository;
 import mate.academy.bookstoreonline.repository.UserRepository;
 import mate.academy.bookstoreonline.service.UserService;
+import mate.academy.bookstoreonline.service.ShoppingCartService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final ShoppingCartService shoppingCartService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
@@ -39,6 +41,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Can't find role by name: "
                         + RoleName.USER.name()));
         user.setRoles(Set.of(userRole));
-        return userMapper.toDto(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        shoppingCartService.createShoppingCart(savedUser);
+        return userMapper.toDto(savedUser);
     }
 }
