@@ -88,6 +88,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private ShoppingCart findCart(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return shoppingCartRepository.findByUserId(user.getId());
+        return shoppingCartRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Can't find shopping cart for user id: " + user.getId()));
     }
 }
