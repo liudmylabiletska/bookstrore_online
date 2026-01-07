@@ -44,12 +44,12 @@ public class Book {
     private String description;
     private String coverImage;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) default 0")
     private boolean isDeleted = false;
 
     @ManyToMany
     @JoinTable(
-            name = "book_categories",
+            name = "books_categories",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )

@@ -1,7 +1,8 @@
 databaseChangeLog:
   - changeSet:
-      id: create-books-categories-table.yaml
-        author: liudmylabiletska
+      id: create-books-categories-table
+      author: liudmylabiletska
+      validCheckSum: ANY  
       changes:
         - createTable:
             tableName: books_categories

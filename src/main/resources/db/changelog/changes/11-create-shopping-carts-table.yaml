@@ -21,7 +21,7 @@ databaseChangeLog:
                     unique: true
               - column:
                   name: is_deleted
-                  type: INYINT(1)
+                  type: BOOLEAN  # Виправлено з INYINT
                   defaultValueBoolean: false
                   constraints:
                     nullable: false

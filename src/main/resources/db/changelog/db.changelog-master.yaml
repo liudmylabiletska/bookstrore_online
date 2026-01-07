@@ -12,7 +12,7 @@ databaseChangeLog:
   - include:
       file: db/changelog/changes/07-insert-admin-user.yaml
   - include:
-      file: db/changelog/changes/08-add-roles-users-wit-role.yaml
+      file: db/changelog/changes/08-add-roles-users-with-role.yaml
   - include:
       file: db/changelog/changes/09-create-category-table.yaml
   - include:

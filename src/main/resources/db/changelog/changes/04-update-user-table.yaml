@@ -6,4 +6,15 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: password, value: "$2a$10$khAQjwl/VaKRLrbydO0vO.C9CnuRV5JRoAxXMpOWGyKrUUZ" }
+              - column:
+                  name: email
+                  value: "admin@example.com"
+              - column:
+                  name: password
+                  value: "$2a$10$khAQjwl/VaKRLrbydO0vO.C9CnuRV5JRoAxXMpOWGyKrUUZ"
+              - column:
+                  name: first_name
+                  value: "Admin"
+              - column:
+                  name: last_name
+                  value: "User"
