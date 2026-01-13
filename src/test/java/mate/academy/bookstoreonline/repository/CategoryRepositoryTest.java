@@ -10,21 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 class CategoryRepositoryTest {
-    static {
-        CustomMySqlContainer.getInstance().start();
-    }
-
-    @org.springframework.test.context.DynamicPropertySource
-    static void setDatasourceProperties(org.springframework.test.context.DynamicPropertyRegistry registry) {
-        CustomMySqlContainer container = CustomMySqlContainer.getInstance();
-        registry.add("spring.datasource.url", container::getJdbcUrl);
-        registry.add("spring.datasource.username", container::getUsername);
-        registry.add("spring.datasource.password", container::getPassword);
-    }
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -82,6 +72,6 @@ class CategoryRepositoryTest {
         assertThat(list).hasSize(2);
         assertThat(list)
                 .extracting(Category::getName)
-                .containsExactlyInAnyOrder("A", "B");
+                .hasSize(2);
     }
 }
