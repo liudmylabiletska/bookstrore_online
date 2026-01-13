@@ -137,10 +137,10 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("When deleteById called, then repository.deleteById is invoked")
     void deleteById_ValidId_Success() {
         Long id = 1L;
-        Category category = createCategory(id, "Fiction", "Stories");
+        Category category = new Category();
+        category.setId(id);
         when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
         categoryService.deleteById(id);
         verify(categoryRepository).deleteById(id);
