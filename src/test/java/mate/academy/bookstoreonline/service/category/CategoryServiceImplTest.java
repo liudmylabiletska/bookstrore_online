@@ -137,12 +137,12 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Delete category by valid ID")
     void deleteById_ValidId_Success() {
-        Long id = 1L;
-        Category category = new Category();
-        category.setId(id);
-        when(categoryRepository.findById(id)).thenReturn(Optional.of(category));
-        categoryService.deleteById(id);
-        verify(categoryRepository).deleteById(id);
+        Long categoryId = 1L;
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
+        doNothing().when(categoryRepository).deleteById(categoryId);
+        categoryService.deleteById(categoryId);
+        verify(categoryRepository, times(1)).deleteById(categoryId);
     }
 }

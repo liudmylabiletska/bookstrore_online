@@ -44,7 +44,7 @@ public class Book {
     private String description;
     private String coverImage;
 
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) default 0")
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 
     @ManyToMany
