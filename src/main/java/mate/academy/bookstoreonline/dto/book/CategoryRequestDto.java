@@ -13,7 +13,6 @@ public class CategoryRequestDto {
     @NotBlank(message = "Title is required")
     private String title;
 
-
     @NotBlank(message = "Author is required")
     private String author;
 
