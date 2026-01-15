@@ -53,7 +53,9 @@ class BookControllerTest {
     @WithMockUser(roles = "USER")
     @DisplayName("Get book by ID - Not Found (Negative)")
     void getBookById_InvalidId_ReturnsNotFound() throws Exception {
-        mockMvc.perform(get("/books/999"))
+        Long nonExistentId = 999L;
+
+        mockMvc.perform(get("/books/" + nonExistentId))
                 .andExpect(status().isNotFound());
     }
 
@@ -73,7 +75,10 @@ class BookControllerTest {
                 new TypeReference<List<BookDto>>() {}
         );
 
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .withEqualsForType((a, b) -> a.compareTo(b) == 0, BigDecimal.class)
+                .isEqualTo(expected);
     }
 
     @Test
@@ -136,9 +141,10 @@ class BookControllerTest {
         dto.setTitle("Test Book");
         dto.setAuthor("Author");
         dto.setIsbn("isbn-111");
-        dto.setPrice(BigDecimal.valueOf(10.0));
+        dto.setPrice(BigDecimal.valueOf(10.0).setScale(2));
         dto.setDescription("Description");
         dto.setCoverImage("image.jpg");
+        dto.setCategoryIds(List.of(1L));
         return dto;
     }
 }

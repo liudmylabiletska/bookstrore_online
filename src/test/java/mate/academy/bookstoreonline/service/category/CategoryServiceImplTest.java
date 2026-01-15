@@ -2,7 +2,6 @@ package mate.academy.bookstoreonline.service.category;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -10,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import java.util.Optional;
-import java.math.BigDecimal;
 import mate.academy.bookstoreonline.dto.book.CategoryDto;
 import mate.academy.bookstoreonline.dto.book.CategoryRequestDto;
 import mate.academy.bookstoreonline.exception.EntityNotFoundException;
@@ -48,11 +46,9 @@ class CategoryServiceImplTest {
     @DisplayName("Given valid CategoryRequestDto, when save called, then category is saved")
     void save_ValidRequest_Success() {
         CategoryRequestDto request = new CategoryRequestDto();
-        request.setTitle("Programming");
-        request.setAuthor("Author");
-        request.setIsbn("12345");
-        request.setPrice(BigDecimal.TEN);
+        request.setName("Programming");
         request.setDescription("Tech books");
+        // ВИДАЛЕНО: setAuthor, setIsbn, setPrice
 
         Category mapped = createCategory(null, "Programming", "Tech books");
         Category saved = createCategory(1L, "Programming", "Tech books");
@@ -78,11 +74,9 @@ class CategoryServiceImplTest {
         Category existing = createCategory(categoryId, "Old Name", "Old Desc");
 
         CategoryRequestDto request = new CategoryRequestDto();
-        request.setTitle("Updated Name");
-        request.setAuthor("Author");
-        request.setIsbn("12345");
-        request.setPrice(BigDecimal.TEN);
+        request.setName("Updated Name");
         request.setDescription("Updated Description");
+        // ВИДАЛЕНО: setAuthor, setIsbn, setPrice
 
         Category saved = createCategory(categoryId, "Updated Name", "Updated Description");
         CategoryDto expectedDto = new CategoryDto();
@@ -90,10 +84,11 @@ class CategoryServiceImplTest {
         expectedDto.setName("Updated Name");
 
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existing));
+
         doAnswer(invocation -> {
             CategoryRequestDto dto = invocation.getArgument(0);
             Category category = invocation.getArgument(1);
-            category.setName(dto.getTitle()); // Мапер мапить title -> name
+            category.setName(dto.getName());
             category.setDescription(dto.getDescription());
             return null;
         }).when(categoryMapper).updateFromDto(request, existing);
