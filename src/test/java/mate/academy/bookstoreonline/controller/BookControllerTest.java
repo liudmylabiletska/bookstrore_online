@@ -144,7 +144,7 @@ class BookControllerTest {
         dto.setTitle("Test Book");
         dto.setAuthor("Author");
         dto.setIsbn("isbn-111");
-        dto.setPrice(BigDecimal.valueOf(10.0));
+        dto.setPrice(new BigDecimal("10.00"));
         dto.setDescription("Description");
         dto.setCoverImage("image.jpg");
         dto.setCategoryIds(List.of(1L));
