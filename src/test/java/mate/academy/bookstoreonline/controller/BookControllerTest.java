@@ -25,8 +25,16 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:database/books/add-books-with-categories.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "classpath:database/books/remove-books.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = {
+        "classpath:database/books/remove-books.sql",
+        "classpath:database/categories/remove-categories.sql",
+        "classpath:database/categories/add-categories.sql",
+        "classpath:database/books/add-books-with-categories.sql"
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {
+        "classpath:database/books/remove-books.sql",
+        "classpath:database/categories/remove-categories.sql"
+}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class BookControllerTest {
 
     @Autowired

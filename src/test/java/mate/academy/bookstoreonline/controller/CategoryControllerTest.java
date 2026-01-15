@@ -107,6 +107,8 @@ class CategoryControllerTest {
     @WithMockUser(roles = "USER")
     @DisplayName("Get books by category ID - Success")
     @Sql(scripts = {
+            "classpath:database/books/remove-books.sql",           
+            "classpath:database/categories/remove-categories.sql",
             "classpath:database/categories/add-categories.sql",
             "classpath:database/books/add-books-with-categories.sql"
     }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
