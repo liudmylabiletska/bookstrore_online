@@ -1,3 +1,5 @@
+INSERT INTO categories (id, name, description, is_deleted)
+VALUES (1, 'Fiction', 'Fiction books description', false);
 INSERT INTO books (id, title, author, isbn, price, description, cover_image, is_deleted)
 VALUES (1, 'Test Book', 'Author', 'isbn-111', 10.00, 'Description', 'image.jpg', false);
 INSERT INTO books_categories (book_id, category_id)

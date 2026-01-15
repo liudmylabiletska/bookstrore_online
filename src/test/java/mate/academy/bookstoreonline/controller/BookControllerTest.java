@@ -25,8 +25,8 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:database/books/add-books-and-categories.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "classpath:database/books/remove-books-and-categories.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "classpath:database/books/add-books-with-categories.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:database/books/remove-books.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class BookControllerTest {
 
     @Autowired
@@ -46,7 +46,10 @@ class BookControllerTest {
                 .andReturn();
 
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .withEqualsForType((a, b) -> a.compareTo(b) == 0, BigDecimal.class)
+                .isEqualTo(expected);
     }
 
     @Test
@@ -141,7 +144,7 @@ class BookControllerTest {
         dto.setTitle("Test Book");
         dto.setAuthor("Author");
         dto.setIsbn("isbn-111");
-        dto.setPrice(BigDecimal.valueOf(10.0).setScale(2));
+        dto.setPrice(BigDecimal.valueOf(10.0));
         dto.setDescription("Description");
         dto.setCoverImage("image.jpg");
         dto.setCategoryIds(List.of(1L));
