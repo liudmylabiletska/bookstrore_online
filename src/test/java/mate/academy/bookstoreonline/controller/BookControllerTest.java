@@ -1,25 +1,15 @@
 package mate.academy.bookstoreonline.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import java.math.BigDecimal;
+import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
 import mate.academy.bookstoreonline.dto.BookDto;
 import mate.academy.bookstoreonline.dto.CreateBookRequestDto;
-import mate.academy.bookstoreonline.model.Book;
-import mate.academy.bookstoreonline.model.Category;
-import mate.academy.bookstoreonline.repository.BookRepository;
-import mate.academy.bookstoreonline.repository.CategoryRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +18,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test") 
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Transactional
+@Sql(scripts = "classpath:database/books/add-books-and-categories.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "classpath:database/books/remove-books-and-categories.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class BookControllerTest {
 
     @Autowired
@@ -43,86 +35,110 @@ class BookControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private BookRepository bookRepository;
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("Get book by ID - Success")
+    void getBookById_ValidId_ReturnsBookDto() throws Exception {
+        BookDto expected = createTestBookDto();
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+        MvcResult result = mockMvc.perform(get("/books/1"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-    private Category savedCategory;
-
-    @BeforeEach
-    void setup() {
-        Category category = new Category();
-        category.setName("Fantasy " + System.currentTimeMillis());
-        category.setDescription("Test Description");
-        savedCategory = categoryRepository.save(category);
+        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    @DisplayName("Get book by ID returns DTO")
-    void getBookById_returnsBookDto() throws Exception {
-        Book book = createBook("Test Book", "isbn-111");
-        Book savedBook = bookRepository.save(book);
-
-        String json = mockMvc.perform(get("/books/" + savedBook.getId()))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        BookDto actual = objectMapper.readValue(json, BookDto.class);
-        assertThat(actual.getTitle()).isEqualTo("Test Book");
+    @DisplayName("Get book by ID - Not Found (Negative)")
+    void getBookById_InvalidId_ReturnsNotFound() throws Exception {
+        mockMvc.perform(get("/books/999"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    @DisplayName("Find all books with pagination")
-    void findAll_shouldReturnPagedBooks() throws Exception {
-        bookRepository.save(createBook("Book X", "isbn-222"));
+    @DisplayName("Find all books - Success")
+    void findAll_ReturnsAllBooks() throws Exception {
+        List<BookDto> expected = List.of(createTestBookDto());
 
-        String json = mockMvc.perform(get("/books"))
+        MvcResult result = mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andReturn();
 
-        JsonNode root = objectMapper.readTree(json);
-        JsonNode contentNode = root.has("content") ? root.get("content") : root;
-
-        List<BookDto> books = objectMapper.readValue(
-                contentNode.toString(),
+        JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
+        List<BookDto> actual = objectMapper.readValue(
+                root.get("content").toString(),
                 new TypeReference<List<BookDto>>() {}
         );
 
-        assertThat(books).isNotEmpty();
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    @DisplayName("Create book works correctly")
-    void createBook_shouldCreateNewBook() throws Exception {
+    @DisplayName("Create book - Success")
+    void createBook_ValidRequest_ReturnsCreatedBook() throws Exception {
         CreateBookRequestDto requestDto = new CreateBookRequestDto();
-        requestDto.setTitle("New Tech Book");
-        requestDto.setAuthor("Author A");
-        requestDto.setIsbn("isbn-new-777");
-        requestDto.setPrice(BigDecimal.valueOf(50));
-        requestDto.setCategoryIds(List.of(savedCategory.getId()));
+        requestDto.setTitle("New Book");
+        requestDto.setAuthor("New Author");
+        requestDto.setIsbn("isbn-unique-999");
+        requestDto.setPrice(BigDecimal.valueOf(50.0));
+        requestDto.setCategoryIds(List.of(1L));
 
-        mockMvc.perform(post("/books")
+        MvcResult result = mockMvc.perform(post("/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        assertThat(actual.getTitle()).isEqualTo(requestDto.getTitle());
+        assertThat(actual.getId()).isNotNull();
     }
 
-    private Book createBook(String title, String isbn) {
-        Book book = new Book();
-        book.setTitle(title);
-        book.setAuthor("Author");
-        book.setIsbn(isbn);
-        book.setPrice(BigDecimal.TEN);
-        book.setCategories(new HashSet<>(List.of(savedCategory)));
-        return book;
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("Update book - Success")
+    void updateBook_ValidRequest_ReturnsUpdatedBook() throws Exception {
+        CreateBookRequestDto updateRequest = new CreateBookRequestDto();
+        updateRequest.setTitle("Updated Title");
+        updateRequest.setAuthor("Author");
+        updateRequest.setIsbn("isbn-111");
+        updateRequest.setPrice(BigDecimal.valueOf(20.0));
+        updateRequest.setCategoryIds(List.of(1L));
+
+        MvcResult result = mockMvc.perform(put("/books/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        assertThat(actual.getTitle()).isEqualTo("Updated Title");
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    @DisplayName("Delete book - Success")
+    void deleteBook_ValidId_ReturnsNoContent() throws Exception {
+        mockMvc.perform(delete("/books/1"))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/books/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    private BookDto createTestBookDto() {
+        BookDto dto = new BookDto();
+        dto.setId(1L);
+        dto.setTitle("Test Book");
+        dto.setAuthor("Author");
+        dto.setIsbn("isbn-111");
+        dto.setPrice(BigDecimal.valueOf(10.0));
+        dto.setDescription("Description");
+        dto.setCoverImage("image.jpg");
+        return dto;
     }
 }
