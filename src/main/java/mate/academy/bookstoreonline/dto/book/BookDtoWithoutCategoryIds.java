@@ -3,6 +3,7 @@ package mate.academy.bookstoreonline.dto.book;
 import lombok.Data;
 import java.math.BigDecimal;
 
+@Data
 public class BookDtoWithoutCategoryIds {
     private String title;
 

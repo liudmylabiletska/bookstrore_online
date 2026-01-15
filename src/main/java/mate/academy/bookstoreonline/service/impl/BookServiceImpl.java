@@ -1,6 +1,6 @@
 package mate.academy.bookstoreonline.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
+import mate.academy.bookstoreonline.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstoreonline.dto.BookDto;
 import mate.academy.bookstoreonline.dto.BookSearchParametersDto;
