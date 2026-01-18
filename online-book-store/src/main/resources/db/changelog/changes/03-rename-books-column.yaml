@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename-books-column
+      author: ksavchenko
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        columnExists:
+           tableName: books
+           columnName: coverImage
+      changes:
+        - renameColumn:
+            tableName: books
+            oldColumnName: coverImage
+            newColumnName: cover_image
+            columnDataType: VARCHAR(255)
+      rollback:
+        - renameColumn:
+            tableName: books
+            oldColumnName: cover_image
+            newColumnName: coverImage
+            columnDataType: VARCHAR(255)
