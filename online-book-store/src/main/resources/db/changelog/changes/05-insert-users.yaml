@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: ksavchenko
+      preConditions:
+        onFail: MARK_RAN
+        onError: MARK_RAN
+        sqlCheck:
+          expectedResult: 0
+          sql: SELECT COUNT(*) FROM users;
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "evgen@example.com"}
+              - column: {name: password, value: "12345678"}
+              - column: {name: first_name, value: "Tigran"}
+              - column: {name: last_name, value: "Tewosyan"}
+              - column: {name: shipping_address, value: "Misto Lutsk, Volynska oblast"}
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "sergiy@example.com" }
+              - column: { name: password, value: "12345678" }
+              - column: { name: first_name, value: "Sergiy" }
+              - column: { name: last_name, value: "Sergiyiv" }
+              - column: { name: shipping_address, value: "Misto Rivne, Rivnenska oblast" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "ivan@example.com" }
+              - column: { name: password, value: "123456789" }
+              - column: { name: first_name, value: "Ivan" }
+              - column: { name: last_name, value: "Ivanov" }
+              - column: { name: shipping_address, value: "Misto Lutsk, Volynska oblast" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: email, value: "dmytro@example.com" }
+              - column: { name: password, value: "12345678910" }
+              - column: { name: first_name, value: "Dmytro" }
+              - column: { name: last_name, value: "Dmytrov" }
+              - column: { name: shipping_address, value: "Misto Kiyv, Kiyvska oblast" }
