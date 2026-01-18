@@ -14,13 +14,9 @@ public interface CategoryMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    @Mapping(source = "title", target = "name")
-    @Mapping(source = "description", target = "description")
     Category toEntity(CategoryRequestDto categoryDto);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    @Mapping(source = "title", target = "name")
-    @Mapping(source = "description", target = "description")
     void updateFromDto(CategoryRequestDto dto, @MappingTarget Category category);
 }
