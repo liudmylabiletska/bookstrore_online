@@ -148,7 +148,7 @@ public class ShoppingCartServiceImplTest {
     }
 
     @Test
-    @DisplayName("Додавання книги - має кинути EntityNotFoundException, якщо книга не знайдена")
+    @DisplayName("Add book - Should throw EntityNotFoundException when book does not exist")
     void save_InvalidBookId_ThrowsException() {
         Authentication auth = mock(Authentication.class);
         User user = setupUserAndAuth(auth);
