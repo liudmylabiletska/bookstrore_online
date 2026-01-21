@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: fix-is-deleted-column-type
+      author: ksavchenko
+      changes:
+        - modifyDataType:
+            tableName: books
+            columnName: is_deleted
+            newDataType: tinyint(1)
+      rollback:
+        - modifyDataType:
+            tableName: books
+            columnName: is_deleted
+            newDataType: tinyint(1)

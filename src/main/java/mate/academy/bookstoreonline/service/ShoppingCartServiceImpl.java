@@ -1,7 +1,7 @@
 package mate.academy.bookstoreonline.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstoreonline.dto.cart.CartItemResponseDto;
+import mate.academy.bookstoreonline.dto.cart.CartItemRequestDto;
 import mate.academy.bookstoreonline.dto.cart.CartItemUpdateQuantityDto;
 import mate.academy.bookstoreonline.dto.cart.ShoppingCartDto;
 import mate.academy.bookstoreonline.exception.EntityNotFoundException;
@@ -36,7 +36,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public ShoppingCartDto save(Authentication authentication, CartItemResponseDto requestDto) {
+    public ShoppingCartDto save(Authentication authentication, CartItemRequestDto requestDto) {
         ShoppingCart cart = findCart(authentication);
         Optional<CartItem> existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getBook().getId().equals(requestDto.bookId()))
@@ -87,8 +87,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private ShoppingCart findCart(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        return shoppingCartRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Can't find shopping cart for user id: " + user.getId()));
+        String email = authentication.getName();
+        return shoppingCartRepository.findByUserEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find shopping cart for user email: " + email));
     }
 }

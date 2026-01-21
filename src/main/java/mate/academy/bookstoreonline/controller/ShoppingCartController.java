@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstoreonline.dto.cart.CartItemResponseDto;
+import mate.academy.bookstoreonline.dto.cart.CartItemRequestDto;
 import mate.academy.bookstoreonline.dto.cart.CartItemUpdateQuantityDto;
 import mate.academy.bookstoreonline.dto.cart.ShoppingCartDto;
 import mate.academy.bookstoreonline.service.ShoppingCartService;
@@ -43,7 +43,7 @@ public class ShoppingCartController {
             description = "Creates book item in cart")
     @ResponseStatus(HttpStatus.CREATED)
     public ShoppingCartDto create(Authentication authentication,
-                                  @RequestBody @Valid CartItemResponseDto dto) {
+                                  @RequestBody @Valid CartItemRequestDto dto) {
         return shoppingCartService.save(authentication, dto);
     }
 
